@@ -1,3 +1,15 @@
 <resources>
     <string name="app_name">IMAGS</string>
+    <string name="welcome_title">Welcome to the IMAGS App!</string>
+    <string name="welcome_text">If you are a registered participant in the study, you may log in using your personal Spotify account credentials on the following screen.
+        If you are not currently officially registered with the study, you will not be able to log in or use this application.
+        If you have any questions, comments, or concerned, please tap the Help button below.</string>
+    <string name="welcome_proceed">Proceed</string>
+    <string name="help_button">Help</string>
+
+    <string name="login_success">Success!</string>
+    <string name="login_bad">Whoops...</string>
+    <string name="login_success_text">You have successfully logged in. Tap the button below to continue.</string>
+    <string name="login_bad_text">You do not appear to be registered to participate in this study. Please contact an administrator for assistance.</string>
+    <string name="logged_in_continue">Continue</string>
 </resources>
