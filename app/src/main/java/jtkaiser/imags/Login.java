@@ -3,9 +3,12 @@ package jtkaiser.imags;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -16,6 +19,7 @@ import com.spotify.sdk.android.authentication.LoginActivity;
 import com.spotify.sdk.android.player.Config;
 import com.spotify.sdk.android.player.ConnectionStateCallback;
 import com.spotify.sdk.android.player.Error;
+import com.spotify.sdk.android.player.PlaybackState;
 import com.spotify.sdk.android.player.Player;
 import com.spotify.sdk.android.player.PlayerEvent;
 import com.spotify.sdk.android.player.Spotify;
@@ -38,9 +42,11 @@ public class Login extends Activity implements
     private Button mNoButton;
     private Button mLogoutButton;
     private String userEmail;
-    private Boolean isPlaying = true;
     private Integer stage;
     private Boolean medStatus;
+    private String trackUri = "spotify:track:2TpxZ7JUBn3uw46aR7qd6V";
+
+    private EditText mUriInput;
 
     // Request code that will be used to verify if the result comes from correct activity
 // Can be any integer
@@ -70,15 +76,35 @@ public class Login extends Activity implements
             }
         });
 
+        mUriInput = (EditText) findViewById(R.id.uri_input);
+        mUriInput.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                trackUri = charSequence.toString();
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
         mPlayToggle = (Button) findViewById(R.id.play_toggle);
         mPlayToggle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(isPlaying){
+                if(mPlayer.getPlaybackState().isPlaying){
                     pausePlayer();
                 }
-                else{
+                else if (mPlayer.getPlaybackState().positionMs != 0){
                     resumePlayer();
+                }
+                else{
+                    startPlayer();
                 }
             }
         });
@@ -219,13 +245,18 @@ public class Login extends Activity implements
     }
 
     private void pausePlayer(){
-        isPlaying = false;
         mPlayToggle.setText(R.string.play_button);
+        mPlayer.pause(null);
     }
 
     private void resumePlayer(){
-        isPlaying = true;
         mPlayToggle.setText(R.string.pause_button);
+        mPlayer.resume(null);
+    }
+
+    private void startPlayer(){
+        mPlayToggle.setText(R.string.pause_button);
+        mPlayer.playUri(null, trackUri, 0, 0);
     }
 
     private void advanceStage() {
@@ -239,12 +270,14 @@ public class Login extends Activity implements
         if (stage == 1) {
             mTitle.setText(R.string.search_title);
             mText.setVisibility(View.INVISIBLE);
+            mUriInput.setVisibility(View.VISIBLE);
         }
 
         // search screen
         if (stage == 2){
             mTitle.setText(R.string.session_title);
             mPlayToggle.setVisibility(View.VISIBLE);
+            mUriInput.setVisibility(View.INVISIBLE);
         }
 
         // session screen

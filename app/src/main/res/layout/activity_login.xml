@@ -35,6 +35,13 @@
                 android:layout_height="wrap_content"
                 android:padding="24dp"
                 android:visibility="invisible" />
+            
+            <EditText
+                android:id="@+id/uri_input"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:hint="@string/uriInput"
+                android:visibility="invisible"/>
 
             <Button
                 android:id="@+id/login_continue"
@@ -87,7 +94,7 @@
                 android:layout_alignBaseline="@+id/login_help"
                 android:layout_alignBottom="@+id/login_help"
                 android:layout_centerHorizontal="true"
-                android:text="@string/pause_button"
+                android:text="@string/play_button"
                 android:visibility="invisible"/>
 
             <Button
