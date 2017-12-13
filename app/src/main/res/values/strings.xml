@@ -12,4 +12,23 @@
     <string name="login_success_text">You have successfully logged in. Tap the button below to continue.</string>
     <string name="login_bad_text">You do not appear to be registered to participate in this study. Please contact an administrator for assistance.</string>
     <string name="logged_in_continue">Continue</string>
+
+    <string name="presession_title">Before We Begin this Session...</string>
+    <string name="presession_text">To do so, simply manipulate the slider on the right by moving the circle up or down. The higher you move the circle, the worse the pain you are experiencing is.
+        When you are ready, set the slider according to how you feel right now. Then, press the button below to continue.</string>
+
+    <string name="search_title">Search for Music</string>
+
+    <string name="session_title">Session in Progress</string>
+    <string name="play_button">Play</string>
+    <string name="pause_button">Pause</string>
+
+    <string name="medication_title">Lastly...</string>
+    <string name="medication_text">Did you take a dose of your prescribed medication?</string>
+    <string name="yes_button">Yes</string>
+    <string name="no_button">No</string>
+
+    <string name="postsession_title">Thank You!</string>
+    <string name="postsession_text">That concludes this session. Please tap the button below to logout.</string>
+    <string name="logout_button">Logout</string>
 </resources>

@@ -7,10 +7,12 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.spotify.sdk.android.authentication.AuthenticationClient;
 import com.spotify.sdk.android.authentication.AuthenticationRequest;
 import com.spotify.sdk.android.authentication.AuthenticationResponse;
+import com.spotify.sdk.android.authentication.LoginActivity;
 import com.spotify.sdk.android.player.Config;
 import com.spotify.sdk.android.player.ConnectionStateCallback;
 import com.spotify.sdk.android.player.Error;
@@ -31,7 +33,14 @@ public class Login extends Activity implements
     private TextView mText;
     private Button mContinueButton;
     private Button mHelpButton;
+    private Button mPlayToggle;
+    private Button mYesbutton;
+    private Button mNoButton;
+    private Button mLogoutButton;
     private String userEmail;
+    private Boolean isPlaying = true;
+    private Integer stage;
+    private Boolean medStatus;
 
     // Request code that will be used to verify if the result comes from correct activity
 // Can be any integer
@@ -42,20 +51,64 @@ public class Login extends Activity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        stage = 0;
         mTitle = (TextView) findViewById(R.id.login_title);
         mText = (TextView) findViewById(R.id.login_text);
+
         mContinueButton = (Button) findViewById(R.id.login_continue);
         mContinueButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                          }
-        });
+                advanceStage();
+                }
+            });
+
         mHelpButton = (Button) findViewById(R.id.login_help);
         mHelpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
             }
         });
+
+        mPlayToggle = (Button) findViewById(R.id.play_toggle);
+        mPlayToggle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(isPlaying){
+                    pausePlayer();
+                }
+                else{
+                    resumePlayer();
+                }
+            }
+        });
+
+        mYesbutton = (Button) findViewById(R.id.yes_button);
+        mYesbutton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                medStatus = true;
+                advanceStage();
+            }
+        });
+
+        mNoButton = (Button) findViewById(R.id.no_button);
+        mNoButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                medStatus = false;
+                advanceStage();
+            }
+        });
+
+        mLogoutButton = (Button) findViewById(R.id.logout_button);
+        mLogoutButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+
 
         AuthenticationRequest.Builder builder = new AuthenticationRequest.Builder(CLIENT_ID,
                 AuthenticationResponse.Type.TOKEN,
@@ -126,6 +179,7 @@ public class Login extends Activity implements
             mTitle.setText(R.string.login_success);
             mText.setText(R.string.login_success_text);
             mContinueButton.setVisibility(View.VISIBLE);
+            Toast.makeText(Login.this, "Logged in as " + userEmail, Toast.LENGTH_LONG).show();
         }
         else{
             mTitle.setText(R.string.login_bad);
@@ -162,5 +216,56 @@ public class Login extends Activity implements
 
     private boolean whiteListCheck(){
         return true;
+    }
+
+    private void pausePlayer(){
+        isPlaying = false;
+        mPlayToggle.setText(R.string.play_button);
+    }
+
+    private void resumePlayer(){
+        isPlaying = true;
+        mPlayToggle.setText(R.string.pause_button);
+    }
+
+    private void advanceStage() {
+        // logged in
+        if (stage == 0) {
+            mTitle.setText(R.string.presession_title);
+            mText.setText(R.string.presession_text);
+        }
+
+        // presession
+        if (stage == 1) {
+            mTitle.setText(R.string.search_title);
+            mText.setVisibility(View.INVISIBLE);
+        }
+
+        // search screen
+        if (stage == 2){
+            mTitle.setText(R.string.session_title);
+            mPlayToggle.setVisibility(View.VISIBLE);
+        }
+
+        // session screen
+        if (stage == 3) {
+            mPlayToggle.setVisibility(View.INVISIBLE);
+            mContinueButton.setVisibility(View.INVISIBLE);
+            mTitle.setText(R.string.medication_title);
+            mText.setVisibility(View.VISIBLE);
+            mText.setText(R.string.medication_text);
+            mYesbutton.setVisibility(View.VISIBLE);
+            mNoButton.setVisibility(View.VISIBLE);
+        }
+
+        //medication screen
+        if (stage == 4) {
+            mTitle.setText(R.string.postsession_title);
+            mText.setText(R.string.postsession_text);
+            mYesbutton.setVisibility(View.INVISIBLE);
+            mNoButton.setVisibility(View.INVISIBLE);
+            mLogoutButton.setVisibility(View.VISIBLE);
+        }
+        stage++;
     }
 }
