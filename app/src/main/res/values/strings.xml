@@ -11,7 +11,7 @@
     <string name="login_bad">Whoops...</string>
     <string name="login_success_text">You have successfully logged in. Tap the button below to continue.</string>
     <string name="login_bad_text">You do not appear to be registered to participate in this study. Please contact an administrator for assistance.</string>
-    <string name="logged_in_continue">Continue</string>
+    <string name="continue_button">Continue</string>
 
     <string name="presession_title">Before We Begin this Session...</string>
     <string name="presession_text">To do so, simply manipulate the slider on the right by moving the circle up or down. The higher you move the circle, the worse the pain you are experiencing is.
@@ -19,8 +19,13 @@
 
     <string name="search_title">Search for Music</string>
     <string name="uriInput">Input Uri</string>
+    <string name="albumField">Album:</string>
+    <string name="trackField">Track:</string>
+    <string name="artistField">Artist:</string>
+    <string name="searchBut">Search</string>
 
     <string name="session_title">Session in Progress</string>
+    <string name="currently_playing">Currently Playing:</string>
     <string name="play_button">Play</string>
     <string name="pause_button">Pause</string>
 

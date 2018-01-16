@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="jtkaiser.imags.Login">
+    tools:context="jtkaiser.imags.LoginActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -26,90 +26,36 @@
                 android:id="@+id/login_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="24dp"
-                android:visibility="invisible" />
+                android:padding="24dp"/>
 
             <TextView
                 android:id="@+id/login_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="24dp"
-                android:visibility="invisible" />
-            
-            <EditText
-                android:id="@+id/uri_input"
-                android:layout_width="200dp"
-                android:layout_height="wrap_content"
-                android:hint="@string/uriInput"
-                android:visibility="invisible"/>
-
-            <Button
-                android:id="@+id/login_continue"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/logged_in_continue"
-                android:visibility="invisible" />
+                android:padding="24dp" />
 
             <LinearLayout
-                android:layout_width="204dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center"
                 android:orientation="horizontal"
-                android:paddingVertical="30dp">
+                android:gravity="center">
 
                 <Button
-                    android:id="@+id/yes_button"
+                    android:id="@+id/login_continue"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/yes_button"
-                    android:visibility="invisible" />
+                    android:text="@string/continue_button"/>
 
                 <Button
-                    android:id="@+id/no_button"
+                    android:id="@+id/login_help"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/no_button"
-                    android:visibility="invisible" />
-
+                    android:text="@string/help_button"/>
             </LinearLayout>
 
-            <Button
-                android:id="@+id/logout_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/logout_button"
-                android:visibility="invisible"/>
+
 
         </LinearLayout>
-
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="141dp">
-
-            <Button
-                android:id="@+id/play_toggle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignBaseline="@+id/login_help"
-                android:layout_alignBottom="@+id/login_help"
-                android:layout_centerHorizontal="true"
-                android:text="@string/play_button"
-                android:visibility="invisible"/>
-
-            <Button
-                android:id="@+id/login_help"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:layout_marginBottom="11dp"
-                android:layout_marginEnd="14dp"
-                android:layout_marginRight="14dp"
-                android:text="@string/help_button"
-                android:visibility="visible" />
-        </RelativeLayout>
 
     </LinearLayout>
 
