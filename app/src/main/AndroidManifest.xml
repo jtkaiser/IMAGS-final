@@ -27,6 +27,7 @@
         <activity android:name=".SessionActivity" />
         <activity android:name=".PostsessionActivity" />
         <activity android:name=".MedicationActivity" />
+        <activity android:name=".SearchResultActivity"></activity>
     </application>
 
 </manifest>

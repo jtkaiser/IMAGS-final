@@ -34,12 +34,14 @@ public class SessionActivity extends AppCompatActivity implements SpotifyPlayer.
     private static final String CLIENT_ID = "0e496f3bf31344c0aaf87a89ea883e0d";
     private static final String REDIRECT_URI = "unique://callback";
 
+    static final String EXTRA_URI = "EXTRA_URI";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_session);
 
-        mTrackUri = getIntent().getStringExtra("trackUri");
+        mTrackUri = getIntent().getStringExtra(EXTRA_URI);
 
         mPlayToggle = (Button) findViewById(R.id.play_toggle);
         mPlayToggle.setOnClickListener(new View.OnClickListener() {
@@ -112,6 +114,12 @@ public class SessionActivity extends AppCompatActivity implements SpotifyPlayer.
         Spotify.destroyPlayer(this);
         super.onDestroy();
     }
+
+//    @Override
+//    protected void onPause(){
+//        pausePlayer();
+//        super.onPause();
+//    }
 
     @Override
     public void onPlaybackEvent(PlayerEvent playerEvent) {

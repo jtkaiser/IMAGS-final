@@ -1,5 +1,6 @@
 package jtkaiser.imags;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -9,6 +10,7 @@ import android.widget.Button;
 public class MainActivity extends AppCompatActivity {
 
     private Button mProceedButton;
+    private Button mHelpButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,5 +25,17 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(i);
             }
         });
+
+        mHelpButton = (Button)findViewById(R.id.main_help);
+        mHelpButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                HelpDialog dialog = new HelpDialog(MainActivity.this);
+
+            }
+        });
+
     }
+
+
 }

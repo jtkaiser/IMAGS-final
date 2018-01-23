@@ -5,7 +5,11 @@
         If you are not currently officially registered with the study, you will not be able to log in or use this application.
         If you have any questions, comments, or concerned, please tap the Help button below.</string>
     <string name="welcome_proceed">Proceed</string>
+
     <string name="help_button">Help</string>
+    <string name="help_title">Help</string>
+    <string name="help_message">Help dialog test test test....</string>
+    <string name="help_ok">OK</string>
 
     <string name="login_success">Success!</string>
     <string name="login_bad">Whoops...</string>
@@ -37,4 +41,6 @@
     <string name="postsession_title">Thank You!</string>
     <string name="postsession_text">That concludes this session. Please tap the button below to logout.</string>
     <string name="logout_button">Logout</string>
+
+    <string name="cover_art_description">Cover art</string>
 </resources>

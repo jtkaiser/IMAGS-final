@@ -31,6 +31,7 @@ public class LoginActivity extends Activity implements ConnectionStateCallback, 
     private Button mHelpButton;
     private String userEmail;
     private Player mPlayer;
+    private String mToken;
 
     // Request code that will be used to verify if the result comes from correct activity
 // Can be any integer
@@ -49,7 +50,8 @@ public class LoginActivity extends Activity implements ConnectionStateCallback, 
             @Override
             public void onClick(View v) {
                 Spotify.destroyPlayer(this);
-                Intent i = new Intent(LoginActivity.this, PresessionActivity.class);
+                Intent i = PresessionActivity.createIntent(LoginActivity.this);
+                i.putExtra(PresessionActivity.EXTRA_TOKEN, mToken);
                 startActivity(i);
             }
         });
@@ -78,20 +80,7 @@ public class LoginActivity extends Activity implements ConnectionStateCallback, 
         if (requestCode == REQUEST_CODE) {
             AuthenticationResponse response = AuthenticationClient.getResponse(resultCode, intent);
             if (response.getType() == AuthenticationResponse.Type.TOKEN) {
-                Config playerConfig = new Config(this, response.getAccessToken(), CLIENT_ID);
-                Spotify.getPlayer(playerConfig, this, new SpotifyPlayer.InitializationObserver() {
-                    @Override
-                    public void onInitialized(SpotifyPlayer spotifyPlayer) {
-                        mPlayer = spotifyPlayer;
-                        mPlayer.addConnectionStateCallback(LoginActivity.this);
-                        mPlayer.addNotificationCallback(LoginActivity.this);
-                    }
-
-                    @Override
-                    public void onError(Throwable throwable) {
-                        Log.e("Login", "Could not initialize player: " + throwable.getMessage());
-                    }
-                });
+                    mToken = response.getAccessToken();
             }
         }
     }
