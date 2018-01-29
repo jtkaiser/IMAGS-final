@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,6 +21,7 @@ import com.spotify.sdk.android.player.Player;
 import com.spotify.sdk.android.player.PlayerEvent;
 import com.spotify.sdk.android.player.Spotify;
 import com.spotify.sdk.android.player.SpotifyPlayer;
+import com.squareup.picasso.Picasso;
 
 public class SessionActivity extends AppCompatActivity implements SpotifyPlayer.NotificationCallback, ConnectionStateCallback {
 
@@ -27,33 +29,34 @@ public class SessionActivity extends AppCompatActivity implements SpotifyPlayer.
     private Button mContinueButton;
     private Button mHelpButton;
     private Player mPlayer;
-    private String mTrackUri;
+    private TrackData mTrackData;
+
     private TextView mTrackTitle;
+    private TextView mTrackArtist;
+    private TextView mTrackAlbum;
+
+    private ImageView mTrackImage;
 
     private static final int REQUEST_CODE = 1337;
     private static final String CLIENT_ID = "0e496f3bf31344c0aaf87a89ea883e0d";
     private static final String REDIRECT_URI = "unique://callback";
-
-    static final String EXTRA_URI = "EXTRA_URI";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_session);
 
-        mTrackUri = getIntent().getStringExtra(EXTRA_URI);
+        mTrackData = TrackData.get();
 
         mPlayToggle = (Button) findViewById(R.id.play_toggle);
         mPlayToggle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(mPlayer.getPlaybackState().isPlaying){
+                if (mPlayer.getPlaybackState().isPlaying) {
                     pausePlayer();
-                }
-                else if (mPlayer.getPlaybackState().positionMs != 0){
+                } else if (mPlayer.getPlaybackState().positionMs != 0) {
                     resumePlayer();
-                }
-                else{
+                } else {
                     startPlayer();
                 }
             }
@@ -71,8 +74,9 @@ public class SessionActivity extends AppCompatActivity implements SpotifyPlayer.
             }
         });
 
-        mTrackTitle = (TextView) findViewById(R.id.track_title);
-        mTrackTitle.setText(getTrackTitle());
+        setInfoDisplay();
+
+
 
         AuthenticationRequest.Builder builder = new AuthenticationRequest.Builder(CLIENT_ID,
                 AuthenticationResponse.Type.TOKEN,
@@ -114,12 +118,6 @@ public class SessionActivity extends AppCompatActivity implements SpotifyPlayer.
         Spotify.destroyPlayer(this);
         super.onDestroy();
     }
-
-//    @Override
-//    protected void onPause(){
-//        pausePlayer();
-//        super.onPause();
-//    }
 
     @Override
     public void onPlaybackEvent(PlayerEvent playerEvent) {
@@ -166,28 +164,33 @@ public class SessionActivity extends AppCompatActivity implements SpotifyPlayer.
         Log.d("LoginActivity", "Received connection message: " + message);
     }
 
-    private void pausePlayer(){
+    private void pausePlayer() {
         mPlayToggle.setText(R.string.play_button);
         mPlayer.pause(null);
     }
 
-    private void resumePlayer(){
+    private void resumePlayer() {
         mPlayToggle.setText(R.string.pause_button);
         mPlayer.resume(null);
     }
 
-    private void startPlayer(){
+    private void startPlayer() {
         mPlayToggle.setText(R.string.pause_button);
-        mPlayer.playUri(null, mTrackUri, 0, 0);
+        mPlayer.playUri(null, mTrackData.getUri(), 0, 0);
     }
 
-    public static Intent newIntent(Context packageContext, String selectedUri) {
-        Intent i = new Intent(packageContext, SessionActivity.class);
-        i.putExtra("trackUri", selectedUri);
-        return i;
+    private void setInfoDisplay() {
+    mTrackTitle = (TextView) findViewById(R.id.track_title);
+    mTrackTitle.setText(TrackData.get().getName());
+
+    mTrackArtist = (TextView) findViewById(R.id.track_artist);
+    mTrackArtist.setText(mTrackData.getArtistNames());
+
+    mTrackAlbum = (TextView) findViewById(R.id.track_album);
+    mTrackAlbum.setText(mTrackData.getAlbumName());
+
+    mTrackImage = (ImageView) findViewById(R.id.track_image);
+    Picasso.with(this).load(mTrackData.getImageUrl()).into(mTrackImage);
     }
 
-    private String getTrackTitle(){
-        return mTrackUri;
-    }
 }
