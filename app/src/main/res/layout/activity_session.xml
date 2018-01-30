@@ -6,53 +6,79 @@
     android:layout_height="match_parent"
     tools:context="jtkaiser.imags.SessionActivity">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:gravity="center">
+        android:layout_height="match_parent">
 
-        <TextView
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/currently_playing"/>
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/session_continue"
+            android:layout_marginTop="122dp"
+            android:orientation="vertical"
+            android:gravity="center_horizontal">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/track_title"/>
+            <TextView
+                android:id="@+id/currently_playing"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/currently_playing" />
+            <ImageView
+                android:id="@+id/track_image"
+                android:layout_width="200dp"
+                android:layout_height="200dp" />
+            <TextView
+                android:id="@+id/track_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="Track" />
+
+            <TextView
+                android:id="@+id/track_artist"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="Artist" />
+
+            <TextView
+                android:id="@+id/track_album"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="Album" />
+        </LinearLayout>
+
 
         <Button
             android:id="@+id/session_continue"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/continue_button"/>
+            android:layout_alignLeft="@+id/login_help"
+            android:layout_alignParentTop="true"
+            android:layout_alignStart="@+id/login_help"
+            android:layout_marginTop="24dp"
+            android:text="@string/continue_button" />
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="141dp">
+        <Button
+            android:id="@+id/play_toggle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/login_help"
+            android:layout_alignBottom="@+id/login_help"
+            android:layout_centerHorizontal="true"
+            android:text="@string/play_button" />
 
-            <Button
-                android:id="@+id/play_toggle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignBaseline="@+id/login_help"
-                android:layout_alignBottom="@+id/login_help"
-                android:layout_centerHorizontal="true"
-                android:text="@string/play_button" />
+        <Button
+            android:id="@+id/login_help"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginBottom="11dp"
+            android:layout_marginEnd="14dp"
+            android:layout_marginRight="14dp"
+            android:text="@string/help_button" />
 
-            <Button
-                android:id="@+id/login_help"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:layout_marginBottom="11dp"
-                android:layout_marginEnd="14dp"
-                android:layout_marginRight="14dp"
-                android:text="@string/help_button" />
-        </RelativeLayout>
-
-    </LinearLayout>
+    </RelativeLayout>
 </android.support.constraint.ConstraintLayout>

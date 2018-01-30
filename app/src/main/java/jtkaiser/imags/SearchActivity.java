@@ -33,7 +33,7 @@ public class SearchActivity extends AppCompatActivity implements Search.View{
     private LinearLayoutManager mLayoutManager = new LinearLayoutManager(this);
     private ScrollListener mScrollListener = new ScrollListener(mLayoutManager);
     private SearchResultsAdapter mAdapter;
-    private String mToken;
+
 
 
     private class ScrollListener extends ResultsScrollListener {
@@ -58,10 +58,10 @@ public class SearchActivity extends AppCompatActivity implements Search.View{
         setContentView(R.layout.activity_search);
 
         Intent intent = getIntent();
-        String mToken = intent.getStringExtra(EXTRA_TOKEN);
+        String token = intent.getStringExtra(EXTRA_TOKEN);
 
         mActionListener = new ResultsPresenter(this, this);
-        mActionListener.init(mToken);
+        mActionListener.init(token);
 
         // Setup search field
         final SearchView searchView = (SearchView) findViewById(R.id.search_view);
@@ -85,8 +85,8 @@ public class SearchActivity extends AppCompatActivity implements Search.View{
             @Override
             public void onItemSelected(View itemView, Track item) {
                 mActionListener.selectTrack(item);
-                Intent i =  new Intent(SearchActivity.this, SessionActivity.class);
-                i.putExtra(SessionActivity.EXTRA_URI, item.uri);
+                TrackData.get().setTrack(item);
+                Intent i = new Intent(SearchActivity.this, SessionActivity.class);
                 startActivity(i);
             }
         });
