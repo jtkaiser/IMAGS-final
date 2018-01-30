@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.spotify.sdk.android.authentication.AuthenticationClient;
@@ -25,8 +26,9 @@ import com.squareup.picasso.Picasso;
 public class SessionActivity extends AppCompatActivity implements SpotifyPlayer.NotificationCallback, ConnectionStateCallback {
 
     private Button mPlayToggle;
-    private Button mContinueButton;
+    private Button mFinishButton;
     private Button mHelpButton;
+    private Button mNewSongButton;
     private Player mPlayer;
     private TrackData mTrackData;
 
@@ -35,6 +37,9 @@ public class SessionActivity extends AppCompatActivity implements SpotifyPlayer.
     private TextView mTrackAlbum;
 
     private ImageView mTrackImage;
+    private SeekBar mSeekBar;
+    private PainTracker mPainTracker;
+    private String mToken;
 
     private static final int REQUEST_CODE = 1337;
     private static final String CLIENT_ID = "0e496f3bf31344c0aaf87a89ea883e0d";
@@ -45,7 +50,16 @@ public class SessionActivity extends AppCompatActivity implements SpotifyPlayer.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_session);
 
+        if(mPlayer != null){
+            Spotify.destroyPlayer(mPlayer);
+        }
+
         mTrackData = TrackData.get();
+        mPainTracker = PainTracker.get();
+
+        mSeekBar = (SeekBar) findViewById(R.id.session_seekbar);
+        mSeekBar.setProgress(mPainTracker.getLastValue());
+
 
         mPlayToggle = (Button) findViewById(R.id.play_toggle);
         mPlayToggle.setOnClickListener(new View.OnClickListener() {
@@ -61,15 +75,45 @@ public class SessionActivity extends AppCompatActivity implements SpotifyPlayer.
             }
         });
 
-        mContinueButton = (Button) findViewById(R.id.session_continue);
-        mContinueButton.setOnClickListener(new View.OnClickListener() {
+        mFinishButton = (Button) findViewById(R.id.session_finish);
+        mFinishButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 pausePlayer();
-                Spotify.destroyPlayer(this);
+                Spotify.destroyPlayer(mPlayer);
 
                 Intent i = new Intent(SessionActivity.this, MedicationActivity.class);
                 startActivity(i);
+            }
+        });
+
+        mNewSongButton = (Button) findViewById(R.id.new_song_button);
+        mNewSongButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                pausePlayer();
+
+                mTrackData.setNewTrack();
+
+                Intent i = SearchActivity.createIntent(SessionActivity.this);
+                i.putExtra(SearchActivity.EXTRA_TOKEN, mToken);
+                startActivity(i);
+            }
+        });
+
+        mSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar mSeekBar, int progress, boolean fromUser) {
+                mPainTracker.setValue(progress);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
             }
         });
 
@@ -94,6 +138,7 @@ public class SessionActivity extends AppCompatActivity implements SpotifyPlayer.
         if (requestCode == REQUEST_CODE) {
             AuthenticationResponse response = AuthenticationClient.getResponse(resultCode, intent);
             if (response.getType() == AuthenticationResponse.Type.TOKEN) {
+                mToken = response.getAccessToken();
                 Config playerConfig = new Config(this, response.getAccessToken(), CLIENT_ID);
                 Spotify.getPlayer(playerConfig, this, new SpotifyPlayer.InitializationObserver() {
                     @Override
@@ -169,6 +214,12 @@ public class SessionActivity extends AppCompatActivity implements SpotifyPlayer.
     }
 
     private void resumePlayer() {
+
+        if(mTrackData.isNewTrack()) {
+            startPlayer();
+        }
+
+
         mPlayToggle.setText(R.string.pause_button);
         mPlayer.resume(null);
     }
@@ -179,17 +230,17 @@ public class SessionActivity extends AppCompatActivity implements SpotifyPlayer.
     }
 
     private void setInfoDisplay() {
-    mTrackTitle = (TextView) findViewById(R.id.track_title);
-    mTrackTitle.setText(TrackData.get().getName());
+        mTrackTitle = (TextView) findViewById(R.id.track_title);
+        mTrackTitle.setText(TrackData.get().getName());
 
-    mTrackArtist = (TextView) findViewById(R.id.track_artist);
-    mTrackArtist.setText(mTrackData.getArtistNames());
+        mTrackArtist = (TextView) findViewById(R.id.track_artist);
+        mTrackArtist.setText(mTrackData.getArtistNames());
 
-    mTrackAlbum = (TextView) findViewById(R.id.track_album);
-    mTrackAlbum.setText(mTrackData.getAlbumName());
+        mTrackAlbum = (TextView) findViewById(R.id.track_album);
+        mTrackAlbum.setText(mTrackData.getAlbumName());
 
-    mTrackImage = (ImageView) findViewById(R.id.track_image);
-    Picasso.with(this).load(mTrackData.getImageUrl()).into(mTrackImage);
+        mTrackImage = (ImageView) findViewById(R.id.track_image);
+        Picasso.with(this).load(mTrackData.getImageUrl()).into(mTrackImage);
     }
 
 }

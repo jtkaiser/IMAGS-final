@@ -19,6 +19,7 @@ public class TrackData {
     private static TrackData sTrackData;
 
     private Track mTrack;
+    private Boolean mIsNewTrack;
 
     public static TrackData get(){
         if (sTrackData == null) {
@@ -28,6 +29,7 @@ public class TrackData {
     }
 
     private TrackData(){
+        mIsNewTrack = false;
 
     }
 
@@ -66,5 +68,13 @@ public class TrackData {
             return image.url;
         }
         else return "";
+    }
+
+    public Boolean isNewTrack() {
+        return mIsNewTrack;
+    }
+
+    public void setNewTrack(){
+        mIsNewTrack = true;
     }
 }
