@@ -11,6 +11,7 @@ public class Session {
     String URI;
     String MED;
     int DUR;
+    int x;
 
 
     // Empty constructor
