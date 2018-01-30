@@ -15,26 +15,51 @@ import java.util.List;
 
 
 public class DBHelper extends SQLiteOpenHelper {
+    //logcat tag
+    private static final String LOG = "DatabaseHelper";
+    //database version
     private static final int VERSION = 1;
     //database name
-    private static final String DATABASE_NAME = "sessionBase.db";
-    //sessions table
+    private static final String DATABASE_NAME = "IMAGS.db";
+
+    //sessions table info
     public static final String SESSION_TABLE_NAME = "sessions";
     public static final String SessionSID = "session ID";
     public static final String SessionPID = "patient ID";
     public static final String SessionURI = "song URI";
     public static final String SessionMED = "medication";
     public static final String SessionDUR = "session duration";
-    //pain table
+
+    //pain table info
     public static final String PAIN_TABLE_NAME = "pain logs";
     public static final String PainSID = "session ID";
     public static final String PainSTART = "time";
     public static final String PainLVL = "pain level";
-    //patients table
+
+    //patients table info
     public static final String PATIENT_TABLE_NAME = "patients";
     public static final String PatientPID = "patient ID";
     public static final String firstN = "first name";
     public static final String lastN = "last name";
+
+    //table create statements (might need to remove cascade constraints)
+    public static final String CREATE_SESSIONS_TABLE = "cascade constraints; create table " + SESSION_TABLE_NAME + "("
+            + SessionSID + " varchar2(10), " + SessionPID + " varchar2(50), " + SessionURI + " varchar2(50), " + SessionMED + " varchar2(20), " + SessionDUR + " number(10), constraint Patient_pk primary key (" + SessionPID +
+            ") constraint Patient_un unique (" + SessionPID +
+            ") constraint Song_un unique (" + SessionURI +
+            ") constraint Session_un unique (" + SessionSID +
+            ") constraint Session_fk foreign key (" + SessionSID +
+            ") references " + PAIN_TABLE_NAME + " (" + SessionSID + "));";
+    public static final String CREATE_PAINS_TABLE = "cascade constraints; create table " + PAIN_TABLE_NAME + "("
+            + PainSID + " varchar2(10), " + PainSTART + " number(10), " + PainLVL + " number(2), constraint Session_pk primary key (" + PainSID +
+            ") constraint Session_un unique (" + PainSID +
+            ") PainVal check (" + PainLVL + " between 0 and 10));";
+    public static final String CREATE_PATIENTS_TABLE = "cascade constraints; create table " + PATIENT_TABLE_NAME + "("
+            + PatientPID + " varchar2(50), " + firstN + " varchar2(30), " + lastN + " varchar2(30), constraint Patient_pk primary key (" + PatientPID +
+            ") constraint Patient_un unique (" + PatientPID +
+            ") constraint Patient_fk foreign key (" + PatientPID +
+            ") references " + SESSION_TABLE_NAME + " (" + PatientPID + "));";
+
 
     public DBHelper(Context context) {
         super(context, DATABASE_NAME, null, VERSION);
@@ -42,31 +67,20 @@ public class DBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {//constructor
-        String CREATE_SESSIONS_TABLE = "drop table " + SESSION_TABLE_NAME + " cascade constraints; create table " + SESSION_TABLE_NAME + "("
-                + SessionSID + " varchar2(10), " + SessionPID + " varchar2(50), " + SessionURI + " varchar2(50), " + SessionMED + " varchar2(20), " + SessionDUR + " number(10), constraint Patient_pk primary key (" + SessionPID +
-                ") constraint Patient_un unique (" + SessionPID +
-                ") constraint Song_un unique (" + SessionURI +
-                ") constraint Session_un unique (" + SessionSID +
-                ") constraint Session_fk foreign key (" + SessionSID +
-                ") references " + PAIN_TABLE_NAME + " (" + SessionSID + "));";
+        //creating the tables
         db.execSQL(CREATE_SESSIONS_TABLE);
-
-        String CREATE_PAINS_TABLE = "drop table " + PAIN_TABLE_NAME + " cascade constraints; create table " + PAIN_TABLE_NAME + "("
-                + PainSID + " varchar2(10), " + PainSTART + " number(10), " + PainLVL + " number(2), constraint Session_pk primary key (" + PainSID +
-                ") constraint Session_un unique (" + PainSID +
-                ") PainVal check (" + PainLVL + " between 0 and 10));";
         db.execSQL(CREATE_PAINS_TABLE);
-
-        String CREATE_PATIENTS_TABLE = "drop table " + PATIENT_TABLE_NAME + " cascade constraints; create table " + PATIENT_TABLE_NAME + "("
-                + PatientPID + " varchar2(50), " + firstN + " varchar2(30), " + lastN + " varchar2(30), constraint Patient_pk primary key (" + PatientPID +
-                ") constraint Patient_un unique (" + PatientPID +
-                ") constraint Patient_fk foreign key (" + PatientPID +
-                ") references " + SESSION_TABLE_NAME + " (" + PatientPID + "));";
         db.execSQL(CREATE_PATIENTS_TABLE);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        //on upgrade drop the older tables
+        db.execSQL("drop table if exists " + SESSION_TABLE_NAME);
+        db.execSQL("drop table if exists " + PAIN_TABLE_NAME);
+        db.execSQL("drop table if exists " + PATIENT_TABLE_NAME);
+
+        //create new table
         onCreate(db); //however when updating one it will recreate all which is not wanted TODOL8r
     }
 
