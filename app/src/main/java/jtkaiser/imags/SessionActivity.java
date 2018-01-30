@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,7 +27,7 @@ import com.squareup.picasso.Picasso;
 public class SessionActivity extends AppCompatActivity implements SpotifyPlayer.NotificationCallback, ConnectionStateCallback {
 
     private Button mPlayToggle;
-    private Button mContinueButton;
+    private Button mFinishButton;
     private Button mHelpButton;
     private Player mPlayer;
     private TrackData mTrackData;
@@ -36,6 +37,8 @@ public class SessionActivity extends AppCompatActivity implements SpotifyPlayer.
     private TextView mTrackAlbum;
 
     private ImageView mTrackImage;
+    private SeekBar mSeekBar;
+    private PainTracker mPainTracker;
 
     private static final int REQUEST_CODE = 1337;
     private static final String CLIENT_ID = "0e496f3bf31344c0aaf87a89ea883e0d";
@@ -47,6 +50,11 @@ public class SessionActivity extends AppCompatActivity implements SpotifyPlayer.
         setContentView(R.layout.activity_session);
 
         mTrackData = TrackData.get();
+        mPainTracker = PainTracker.get();
+
+        mSeekBar = (SeekBar) findViewById(R.id.session_seekbar);
+        mSeekBar.setProgress(mPainTracker.getLastValue());
+
 
         mPlayToggle = (Button) findViewById(R.id.play_toggle);
         mPlayToggle.setOnClickListener(new View.OnClickListener() {
@@ -62,8 +70,8 @@ public class SessionActivity extends AppCompatActivity implements SpotifyPlayer.
             }
         });
 
-        mContinueButton = (Button) findViewById(R.id.session_continue);
-        mContinueButton.setOnClickListener(new View.OnClickListener() {
+        mFinishButton = (Button) findViewById(R.id.session_finish);
+        mFinishButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 pausePlayer();
@@ -180,17 +188,17 @@ public class SessionActivity extends AppCompatActivity implements SpotifyPlayer.
     }
 
     private void setInfoDisplay() {
-    mTrackTitle = (TextView) findViewById(R.id.track_title);
-    mTrackTitle.setText(TrackData.get().getName());
+        mTrackTitle = (TextView) findViewById(R.id.track_title);
+        mTrackTitle.setText(TrackData.get().getName());
 
-    mTrackArtist = (TextView) findViewById(R.id.track_artist);
-    mTrackArtist.setText(mTrackData.getArtistNames());
+        mTrackArtist = (TextView) findViewById(R.id.track_artist);
+        mTrackArtist.setText(mTrackData.getArtistNames());
 
-    mTrackAlbum = (TextView) findViewById(R.id.track_album);
-    mTrackAlbum.setText(mTrackData.getAlbumName());
+        mTrackAlbum = (TextView) findViewById(R.id.track_album);
+        mTrackAlbum.setText(mTrackData.getAlbumName());
 
-    mTrackImage = (ImageView) findViewById(R.id.track_image);
-    Picasso.with(this).load(mTrackData.getImageUrl()).into(mTrackImage);
+        mTrackImage = (ImageView) findViewById(R.id.track_image);
+        Picasso.with(this).load(mTrackData.getImageUrl()).into(mTrackImage);
     }
 
 }

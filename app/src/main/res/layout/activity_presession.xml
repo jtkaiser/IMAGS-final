@@ -6,42 +6,68 @@
     android:layout_height="match_parent"
     tools:context="jtkaiser.imags.PresessionActivity">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:orientation="vertical">
 
-        <TextView
-            android:text="@string/presession_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="24dp"/>
-
-        <TextView
-            android:text="@string/presession_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="24dp"/>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center">
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:layout_weight="1">
 
-            <Button
-                android:id="@+id/presession_continue"
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/continue_button"/>
+                android:layout_margin="@dimen/activity_vertical_margin"
+                android:text="@string/presession_title"
+                android:textSize="18sp"
+                android:textStyle="bold" />
 
-            <Button
-                android:id="@+id/presession_help"
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/help_button"/>
+                android:layout_marginBottom="@dimen/activity_vertical_margin"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_marginRight="@dimen/activity_horizontal_margin"
+                android:text="@string/presession_text"
+                android:textAlignment="center" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:layout_marginBottom="@dimen/activity_vertical_margin">
+
+                <Button
+                    android:id="@+id/presession_continue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/continue_button"
+                    android:visibility="invisible"/>
+
+                <Button
+                    android:id="@+id/presession_help"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/help_button"/>
+            </LinearLayout>
+
+            <SeekBar
+                android:id="@+id/presession_seekbar"
+                style="@style/Widget.AppCompat.SeekBar.Discrete"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:max="10"
+                android:min="0"
+                android:progress="0" />
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:src="@drawable/faces_pain_scale"/>
         </LinearLayout>
-        
-    </LinearLayout>
+
+
+
 </android.support.constraint.ConstraintLayout>

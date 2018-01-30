@@ -22,12 +22,13 @@
             android:name="com.spotify.sdk.android.authentication.LoginActivity"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
         <activity android:name=".LoginActivity" />
-        <activity android:name=".PresessionActivity" />
+        <activity
+            android:name=".PresessionActivity"
+            android:screenOrientation="landscape"/>
         <activity android:name=".SearchActivity" />
         <activity android:name=".SessionActivity" />
         <activity android:name=".PostsessionActivity" />
         <activity android:name=".MedicationActivity" />
-        <activity android:name=".SearchResultActivity"></activity>
     </application>
 
 </manifest>
