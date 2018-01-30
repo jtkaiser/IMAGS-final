@@ -1,6 +1,5 @@
 package jtkaiser.imags;
 
-import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -11,6 +10,8 @@ public class MainActivity extends AppCompatActivity {
 
     private Button mProceedButton;
     private Button mHelpButton;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
