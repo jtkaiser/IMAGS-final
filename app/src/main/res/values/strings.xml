@@ -33,6 +33,7 @@
     <string name="play_button">Play</string>
     <string name="pause_button">Pause</string>
     <string name="finish_button">Finish Session</string>
+    <string name="new_song">New Song</string>
 
     <string name="medication_title">Lastly...</string>
     <string name="medication_text">Did you take a dose of your prescribed medication?</string>

@@ -29,6 +29,7 @@ public class SessionActivity extends AppCompatActivity implements SpotifyPlayer.
     private Button mPlayToggle;
     private Button mFinishButton;
     private Button mHelpButton;
+    private Button mNewSongButton;
     private Player mPlayer;
     private TrackData mTrackData;
 
@@ -39,6 +40,7 @@ public class SessionActivity extends AppCompatActivity implements SpotifyPlayer.
     private ImageView mTrackImage;
     private SeekBar mSeekBar;
     private PainTracker mPainTracker;
+    private String mToken;
 
     private static final int REQUEST_CODE = 1337;
     private static final String CLIENT_ID = "0e496f3bf31344c0aaf87a89ea883e0d";
@@ -48,6 +50,10 @@ public class SessionActivity extends AppCompatActivity implements SpotifyPlayer.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_session);
+
+        if(mPlayer != null){
+            Spotify.destroyPlayer(mPlayer);
+        }
 
         mTrackData = TrackData.get();
         mPainTracker = PainTracker.get();
@@ -75,10 +81,40 @@ public class SessionActivity extends AppCompatActivity implements SpotifyPlayer.
             @Override
             public void onClick(View v) {
                 pausePlayer();
-                Spotify.destroyPlayer(this);
+                Spotify.destroyPlayer(mPlayer);
 
                 Intent i = new Intent(SessionActivity.this, MedicationActivity.class);
                 startActivity(i);
+            }
+        });
+
+        mNewSongButton = (Button) findViewById(R.id.new_song_button);
+        mNewSongButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                pausePlayer();
+
+                mTrackData.setNewTrack();
+
+                Intent i = SearchActivity.createIntent(SessionActivity.this);
+                i.putExtra(SearchActivity.EXTRA_TOKEN, mToken);
+                startActivity(i);
+            }
+        });
+
+        mSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar mSeekBar, int progress, boolean fromUser) {
+                mPainTracker.setValue(progress);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
             }
         });
 
@@ -103,6 +139,7 @@ public class SessionActivity extends AppCompatActivity implements SpotifyPlayer.
         if (requestCode == REQUEST_CODE) {
             AuthenticationResponse response = AuthenticationClient.getResponse(resultCode, intent);
             if (response.getType() == AuthenticationResponse.Type.TOKEN) {
+                mToken = response.getAccessToken();
                 Config playerConfig = new Config(this, response.getAccessToken(), CLIENT_ID);
                 Spotify.getPlayer(playerConfig, this, new SpotifyPlayer.InitializationObserver() {
                     @Override
@@ -178,6 +215,12 @@ public class SessionActivity extends AppCompatActivity implements SpotifyPlayer.
     }
 
     private void resumePlayer() {
+
+        if(mTrackData.isNewTrack()) {
+            startPlayer();
+        }
+
+
         mPlayToggle.setText(R.string.pause_button);
         mPlayer.resume(null);
     }
