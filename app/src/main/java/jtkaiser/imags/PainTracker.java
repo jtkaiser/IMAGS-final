@@ -9,10 +9,16 @@ public class PainTracker {
 
     private int mLastValue;
 
+    //private static DBHelper db;
+
     public static PainTracker get(){
         if (sPainTracker == null) {
             sPainTracker = new PainTracker();
         }
+        PainLog value = new PainLog(sPainTracker.getLastValue()); //create painlog
+        //db.createPainLog(value); //insert painlog with only a value in db
+        //Log.d("Pain Rating: ", String.valueOf(value.getPain()));
+        //db.closeDB();
         return sPainTracker;
     }
 

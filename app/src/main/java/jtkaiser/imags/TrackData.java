@@ -1,7 +1,5 @@
 package jtkaiser.imags;
 
-import android.content.Context;
-
 import com.google.common.base.Joiner;
 
 import java.util.ArrayList;
@@ -20,6 +18,8 @@ public class TrackData {
 
     private Track mTrack;
     private Boolean mIsNewTrack;
+
+    //private DBHelper db; //for later
 
     public static TrackData get(){
         if (sTrackData == null) {

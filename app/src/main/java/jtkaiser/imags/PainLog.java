@@ -15,9 +15,16 @@ public class PainLog {
     }
 
     // constructor
+    public PainLog(int pain){
+        this.PAIN = pain;
+    }
+
+    // constructor
     public PainLog(String inital){
         this.inital = inital;
     }
+
+
     // constructor
     public PainLog(String sid, String start, int pain, String init){
         this.SID = sid;
