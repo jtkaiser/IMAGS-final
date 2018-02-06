@@ -6,17 +6,24 @@ package jtkaiser.imags;
 
 public class PainLog {
     String SID;
-    int START;
+    String timeStsmp;
+    String inital;
     int PAIN;
 
     // Empty constructor
     public PainLog(){
     }
+
     // constructor
-    public PainLog(String sid, int start, int pain){
+    public PainLog(String inital){
+        this.inital = inital;
+    }
+    // constructor
+    public PainLog(String sid, String start, int pain, String init){
         this.SID = sid;
-        this.START = start;
+        this.timeStsmp = start;
         this.PAIN = pain;
+        this.inital = init;
     }
 
     // getting SID
@@ -29,14 +36,14 @@ public class PainLog {
         this.SID = sid;
     }
 
-    // getting med status
-    public int getStart(){
-        return this.START;
+    // getting timeStamp (start of the pain record)
+    public String getStart(){
+        return this.timeStsmp;
     }
 
-    // setting start time
-    public void setStart(int time){
-        this.START = time;
+    // setting timeStamp
+    public void setStart(String time){
+        this.timeStsmp = time;
     }
 
     // getting pain lvl
@@ -47,5 +54,15 @@ public class PainLog {
     // setting pain lvl
     public void setPain(int pain){
         this.PAIN = pain;
+    }
+
+    // getting initial status info
+    public String getInit(){
+        return this.inital;
+    }
+
+    // setting initial status
+    public void setInit(String YN){
+        this.inital = YN;
     }
 }
