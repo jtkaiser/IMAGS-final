@@ -1,5 +1,7 @@
 package jtkaiser.imags;
 
+import android.util.Log;
+
 /**
  * Created by jtkai on 1/29/2018.
  */
@@ -16,9 +18,9 @@ public class PainTracker {
             sPainTracker = new PainTracker();
         }
         PainLog value = new PainLog(sPainTracker.getLastValue()); //create painlog
-        //db.createPainLog(value); //insert painlog with only a value in db
-        //Log.d("Pain Rating: ", String.valueOf(value.getPain()));
-        //db.closeDB();
+        db.createPainLog(value); //insert painlog with only a value in db
+        Log.d("Pain Rating: ", String.valueOf(value.getPain()));
+        db.closeDB();
         return sPainTracker;
     }
 
