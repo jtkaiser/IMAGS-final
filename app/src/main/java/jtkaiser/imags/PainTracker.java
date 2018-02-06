@@ -1,5 +1,7 @@
 package jtkaiser.imags;
 
+import android.content.Context;
+
 /**
  * Created by jtkai on 1/29/2018.
  */
@@ -9,17 +11,22 @@ public class PainTracker {
 
     private int mLastValue;
 
-    private static DBHelper db;
+    private static DBHelper dbH;
+    //private static SQLiteDatabase db;
+    private static Context context;
 
     public static PainTracker get(){
         if (sPainTracker == null) {
             sPainTracker = new PainTracker();
         }
+        dbH = new DBHelper(context);
         PainLog value = new PainLog(sPainTracker.getLastValue()); //create painlog
+        //dbH.onCreate(db);
+        //dbH.createPainLogpain(value);
+            ; //insert painlog with only a value in db
+            //db.getAllPainLogs(); //Log.d("Pain Rating: ", String.valueOf(value.getPain()));
 
-        db.createPainLogpain(value); //insert painlog with only a value in db
-        db.getAllPainLogs();//Log.d("Pain Rating: ", String.valueOf(value.getPain()));
-        db.closeDB();
+        //dbH.closeDB();
         return sPainTracker;
     }
 
