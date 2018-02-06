@@ -4,8 +4,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.SeekBar;
 
 public class PresessionActivity extends AppCompatActivity {
@@ -16,6 +18,7 @@ public class PresessionActivity extends AppCompatActivity {
     private String mToken;
     private SeekBar mSeekBar;
     private PainTracker mPainTracker;
+    private ImageView mFacesScale;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +44,7 @@ public class PresessionActivity extends AppCompatActivity {
             @Override
             public void onProgressChanged(SeekBar mSeekBar, int progress, boolean fromUser) {
                 mPainTracker.setValue(progress);
+                mContinueButton.setVisibility(View.VISIBLE);
             }
 
             @Override
@@ -50,12 +54,33 @@ public class PresessionActivity extends AppCompatActivity {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-              mContinueButton.setVisibility(View.VISIBLE);
+                mContinueButton.setVisibility(View.VISIBLE);
+            }
+        });
+
+        mFacesScale = (ImageView) findViewById(R.id.presession_faces);
+        mFacesScale.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_DOWN){
+                    processTouch(event.getX());
+                }
+                return true;
             }
         });
     }
 
     public static Intent createIntent(Context context) {
         return new Intent(context, PresessionActivity.class);
+    }
+
+    private void processTouch(float xPos){
+        double innerXPos = (xPos - mFacesScale.getLeft());
+        Double relativePos = Math.floor((innerXPos * 6) / mFacesScale.getWidth());
+        int progressVal = 2 * relativePos.intValue();
+        if(progressVal > 10){
+            progressVal = 10;
+        }
+        mSeekBar.setProgress(progressVal);
     }
 }

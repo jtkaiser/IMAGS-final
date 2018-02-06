@@ -13,7 +13,8 @@
             android:layout_height="match_parent"
             android:gravity="center"
             android:orientation="vertical"
-            android:layout_weight="1">
+            android:layout_weight="1"
+            android:layout_marginTop="70dp">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -37,7 +38,8 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:gravity="center"
-                android:layout_marginBottom="@dimen/activity_vertical_margin">
+                android:layout_marginBottom="100dp"
+                android:layout_marginTop="@dimen/activity_vertical_margin">
 
                 <Button
                     android:id="@+id/presession_continue"
@@ -53,19 +55,28 @@
                     android:text="@string/help_button"/>
             </LinearLayout>
 
-            <SeekBar
-                android:id="@+id/presession_seekbar"
-                style="@style/Widget.AppCompat.SeekBar.Discrete"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="30dp"
-                android:max="10"
-                android:min="0"
-                android:progress="0" />
+                android:layout_height="160dp"
+                android:orientation="vertical"
+                android:layout_margin="@dimen/activity_horizontal_margin">
 
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:src="@drawable/faces_pain_scale"/>
+                <SeekBar
+                    android:id="@+id/presession_seekbar"
+                    style="@style/Widget.AppCompat.SeekBar.Discrete"
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:max="10"
+                    android:min="0" />
+
+                <ImageView
+                    android:id="@+id/presession_faces"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clickable="false"
+                    android:src="@drawable/faces_pain_scale" />
+            </LinearLayout>
+
         </LinearLayout>
 
 

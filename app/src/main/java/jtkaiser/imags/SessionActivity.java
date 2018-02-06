@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -39,6 +40,7 @@ public class SessionActivity extends AppCompatActivity implements SpotifyPlayer.
 
     private ImageView mTrackImage;
     private SeekBar mSeekBar;
+    private ImageView mFacesScale;
     private PainTracker mPainTracker;
     private String mToken;
 
@@ -115,6 +117,17 @@ public class SessionActivity extends AppCompatActivity implements SpotifyPlayer.
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
+            }
+        });
+
+        mFacesScale = (ImageView) findViewById(R.id.session_faces);
+        mFacesScale.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_DOWN){
+                    processTouch(event.getX());
+                }
+                return true;
             }
         });
 
@@ -242,6 +255,16 @@ public class SessionActivity extends AppCompatActivity implements SpotifyPlayer.
 
         mTrackImage = (ImageView) findViewById(R.id.track_image);
         Picasso.with(this).load(mTrackData.getImageUrl()).into(mTrackImage);
+    }
+
+    private void processTouch(float xPos){
+        double innerXPos = (xPos - mFacesScale.getLeft());
+        Double relativePos = Math.floor((innerXPos * 6) / mFacesScale.getWidth());
+        int progressVal = 2 * relativePos.intValue();
+        if(progressVal > 10){
+            progressVal = 10;
+        }
+        mSeekBar.setProgress(progressVal);
     }
 
 }
