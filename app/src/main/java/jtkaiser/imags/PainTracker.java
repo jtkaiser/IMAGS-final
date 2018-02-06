@@ -9,7 +9,7 @@ public class PainTracker {
 
     private int mLastValue;
 
-    //private static DBHelper db;
+    private static DBHelper db;
 
     public static PainTracker get(){
         if (sPainTracker == null) {
