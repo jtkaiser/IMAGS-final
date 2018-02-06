@@ -73,6 +73,11 @@ public class DBHelper extends SQLiteOpenHelper {
         super(context, DATABASE_NAME, null, VERSION);
     }
 
+    public void closeDB() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        if (db != null && db.isOpen()) { db.close(); }
+    }
+
     @Override
     public void onCreate(SQLiteDatabase db) {//constructor
         //creating the tables
