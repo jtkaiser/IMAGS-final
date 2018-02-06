@@ -10,7 +10,7 @@ public class Session {
     String PID;
     String URI;
     String MED;
-    int DUR;
+    String DUR;
 
 
     // Empty constructor
@@ -25,7 +25,7 @@ public class Session {
     }
 
     // constructor
-    public Session(String sid, String pid, String uri, int time){
+    public Session(String sid, String pid, String uri, String time){
         this.SID = sid;
         this.PID = pid;
         this.URI = uri;
@@ -33,7 +33,7 @@ public class Session {
     }
 
     // constructor
-    public Session(String sid, String pid, String uri, String med, int time){
+    public Session(String sid, String pid, String uri, String med, String time){
         this.SID = sid;
         this.PID = pid;
         this.URI = uri;
@@ -81,13 +81,13 @@ public class Session {
         this.MED = med;
     }
 
-    // getting phone number
-    public int getDuration(){
+    // getting duration of session
+    public String getDuration(){
         return this.DUR;
     }
 
-    // setting phone number
-    public void setDuration(int dur){
+    // setting duration of session
+    public void setDuration(String dur){
         this.DUR = dur;
     }
 }
