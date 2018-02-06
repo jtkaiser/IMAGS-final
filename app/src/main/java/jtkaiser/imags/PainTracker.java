@@ -16,8 +16,9 @@ public class PainTracker {
             sPainTracker = new PainTracker();
         }
         PainLog value = new PainLog(sPainTracker.getLastValue()); //create painlog
-        db.createPainLog(value); //insert painlog with only a value in db
-        db.updatePainLog(value);//Log.d("Pain Rating: ", String.valueOf(value.getPain()));
+
+        db.createPainLogpain(value); //insert painlog with only a value in db
+        db.getAllPainLogs();//Log.d("Pain Rating: ", String.valueOf(value.getPain()));
         db.closeDB();
         return sPainTracker;
     }

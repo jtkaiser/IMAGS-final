@@ -182,6 +182,44 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     // Adding new painlog row into the table
+    void createPainLogpain(PainLog painLog) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        //values.put(timeStamp, painLog.getStart()); // time
+        values.put(painLVL, painLog.getPain()); // pain
+
+        // Inserting Row
+        db.insert(PAIN_TABLE_NAME, null, values);
+        //db.close(); // Closing database connection
+    }
+
+    // Getting All painlogspain
+    public List<PainLog> getAllPain() {
+        List<PainLog> painLogsList = new ArrayList<PainLog>();
+        // Select All Query
+        String query = "select * from " + PAIN_TABLE_NAME;
+
+        Log.e(LOG, query);
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(query, null);
+
+        // looping through all rows and adding to list
+        if (cursor.moveToFirst()) {
+            do {
+                PainLog pl = new PainLog();
+                pl.setPain(cursor.getColumnIndex(painLVL));
+          //      pl.setStart(cursor.getString(cursor.getColumnIndex(timeStamp)));
+
+                // Adding painlog pl to list painlog list
+                painLogsList.add(pl);
+            } while (cursor.moveToNext());
+        }
+        // return painlog list
+        return painLogsList;
+    }
+
+    // Adding new painlog row into the table
     void createPainLog(PainLog painLog) {
         SQLiteDatabase db = this.getWritableDatabase();
 
