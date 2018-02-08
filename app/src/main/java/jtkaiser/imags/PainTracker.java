@@ -14,6 +14,10 @@ public class PainTracker {
 
     private static Context applicationContext;
 
+    public static Context getApplicationContext() {
+        return applicationContext;
+    }
+
     public static PainTracker get(){
         if (sPainTracker == null) {
             sPainTracker = new PainTracker();
@@ -34,10 +38,6 @@ public class PainTracker {
     private PainTracker(){
         mLastValue = 0;
 
-    }
-
-    public static Context getApplicationContext() {
-        return applicationContext;
     }
 
     public int getLastValue(){
