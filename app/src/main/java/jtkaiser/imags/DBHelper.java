@@ -182,7 +182,7 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     // Adding new painlog row into the table
-    boolean createPainLogpain(PainLog painLog) {
+    void createPainLogpain(PainLog painLog) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
@@ -190,8 +190,8 @@ public class DBHelper extends SQLiteOpenHelper {
         values.put(painLVL, painLog.getPain()); // pain
 
         // Inserting Row
-        db.insert(PAIN_TABLE_NAME, null, values);
-        return true;
+        db.insert(PAIN_TABLE_NAME,  null, values);
+        //return true;
         //db.close(); // Closing database connection
     }
 
