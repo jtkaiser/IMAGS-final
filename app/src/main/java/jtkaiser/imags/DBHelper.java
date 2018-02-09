@@ -28,45 +28,49 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String PAIN_TABLE_NAME = "pain logs";
     public static final String PATIENT_TABLE_NAME = "patients";
 
-    //column names that are recyled in sessions, painlog, and patients
-    public static final String SID = "session ID";
-    public static final String PID = "patient ID";
-    public static final String URI = "song URI";
-
     //sessions table info
     public static final String MED = "medication status";
     public static final String DUR = "session duration";
-    // sid, pid, and uri obvi
+    public static final String SID = "session ID";
+    public static final String PIDs = "patient ID session";
+    public static final String URIs = "song URI";
+
 
     //pain log table info
     public static final String timeStamp = "time";
     public static final String painLVL = "pain level";
     public static final String INIT = "initial start pain?";
-    //sid obvi
+    public static final String SIDp = "session ID pain";
+
 
     //patients table info
     public static final String firstN = "first name";
     public static final String lastN = "last name";
+    public static final String PID = "patient ID";
     //pid obvi
 
 //table create statements (might need to remove cascade constraints)
 //public static final String CREATE_SESSIONS_TABLE = "cascade constraints; create table " + SESSION_TABLE_NAME + "("
     // session table create sql query
-    private static final String CREATE_SESSIONS_TABLE = "cascade constraints; create table "
+    private static final String CREATE_SESSIONS_TABLE = "create table "
         + SESSION_TABLE_NAME + "(" + SID + " varchar2(10) primary key, "
-        + PID + " varchar2(50), " + URI + " varchar2(50), "
-        + MED + " varchar2(20), " + DUR + " datetime, "
-        + "constraint Session_un unique (" + SID + "));";//"constraint Patient_pk primary key (" + SessionPID + ") constraint Patient_un unique (" + SessionPID + ") constraint Session_fk foreign key (" + SessionSID + ") references " + PAIN_TABLE_NAME + " (" + SessionSID + "));";
+        + PIDs + " varchar2(50), " + URIs + " varchar2(50), "
+        + MED + " varchar2(20), " + DUR + " datetime, foreign key("
+        + PIDs + ") references " + PATIENT_TABLE_NAME + "("
+        + PID + "));";
+        //+ "constraint Session_un unique (" + SID + "));";//"constraint Patient_pk primary key (" + SessionPID + ") constraint Patient_un unique (" + SessionPID + ") constraint Session_fk foreign key (" + SessionSID + ") references " + PAIN_TABLE_NAME + " (" + SessionSID + "));";
     //pain log table create sql query
-    public static final String CREATE_PAINS_TABLE = "cascade constraints; create table "
-            + PAIN_TABLE_NAME + "(" + SID + " varchar2(10), "
+    public static final String CREATE_PAINS_TABLE = "create table "
+            + PAIN_TABLE_NAME + "(" + SIDp + " varchar2(10), "
             + timeStamp + " datetime, " + painLVL + " number(2), "
-            + INIT + "varchar2(3), constraint Pain_ch check (" + painLVL + " between 0 and 10));";
+            + INIT + "varchar2(3), foreign key(" + SIDp + ") references "
+            + SESSION_TABLE_NAME + "(" + SID + "));";
+                 //, constraint Pain_ch check (" + painLVL + " between 0 and 10));";
     //patients table create sql query
-    public static final String CREATE_PATIENTS_TABLE = "cascade constraints; create table "
+    public static final String CREATE_PATIENTS_TABLE = "create table "
             + PATIENT_TABLE_NAME + "(" + PID + " varchar2(50) primary key, "
-            + firstN + " varchar2(30), " + lastN + " varchar2(30), constraint Patient_un unique ("
-            + PID + "));";
+            + firstN + " varchar2(30), " + lastN + " varchar2(30));";//, constraint Patient_un unique ("
+            //+ PID + "));";
 
 
     public DBHelper(Context context) {
@@ -134,7 +138,7 @@ public class DBHelper extends SQLiteOpenHelper {
         return patient;
     }
 
-    // Getting All Contacts
+    // Getting All Patients
     public List<Patient> getAllPatients() {
         List<Patient> patients = new ArrayList<Patient>();
 
@@ -225,7 +229,7 @@ public class DBHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(SID, painLog.getSID()); //associated
+        values.put(SIDp, painLog.getSID()); //associated
         values.put(timeStamp, painLog.getStart()); // time
         values.put(painLVL, painLog.getPain()); // pain
 
@@ -239,7 +243,7 @@ public class DBHelper extends SQLiteOpenHelper {
         List<PainLog> painLogSID = new ArrayList<PainLog>();
 
         String query = "select * from " + PATIENT_TABLE_NAME + " where "
-                + SID + " = " + sid;
+                + SIDp + " = " + sid;
 
         Log.e(LOG, query); //record purposes
 
@@ -249,7 +253,7 @@ public class DBHelper extends SQLiteOpenHelper {
         if (cursor.moveToFirst()) {
             do {
                 PainLog pl = new PainLog();
-                pl.setSID(cursor.getString(cursor.getColumnIndex(SID)));
+                pl.setSID(cursor.getString(cursor.getColumnIndex(SIDp)));
                 pl.setStart(cursor.getString(cursor.getColumnIndex(timeStamp)));
                 pl.setPain(cursor.getColumnIndex(painLVL));
                 pl.setInit(cursor.getString(cursor.getColumnIndex(INIT)));
@@ -273,7 +277,7 @@ public class DBHelper extends SQLiteOpenHelper {
         if (cursor.moveToFirst()) {
             do {
                 PainLog pl = new PainLog();
-                pl.setSID(cursor.getString(cursor.getColumnIndex(SID)));
+                pl.setSID(cursor.getString(cursor.getColumnIndex(SIDp)));
                 pl.setPain(cursor.getColumnIndex(painLVL));
                 pl.setStart(cursor.getString(cursor.getColumnIndex(timeStamp)));
                 pl.setInit(cursor.getString(cursor.getColumnIndex(INIT)));
@@ -296,14 +300,14 @@ public class DBHelper extends SQLiteOpenHelper {
         values.put(INIT, pl.getInit());
 
         // updating row
-        return db.update(PAIN_TABLE_NAME, values, SID + " = ?",
+        return db.update(PAIN_TABLE_NAME, values, SIDp + " = ?",
                 new String[] { String.valueOf(pl.getSID()) });
     }
 
     // Deleting single painlog
     public void deletePainLog(PainLog pl) {
         SQLiteDatabase db = this.getWritableDatabase();
-        db.delete(PAIN_TABLE_NAME, SID + " = ?",
+        db.delete(PAIN_TABLE_NAME, SIDp + " = ?",
                 new String[] { String.valueOf(pl.getSID()) });
         //db.close();
     }
@@ -314,8 +318,8 @@ public class DBHelper extends SQLiteOpenHelper {
 
         ContentValues values = new ContentValues();
         values.put(SID, session.getSID()); // session ID
-        values.put(PID, session.getPID()); // patient ID
-        values.put(URI, session.getURI()); // song URI
+        values.put(PIDs, session.getPID()); // patient ID
+        values.put(URIs, session.getURI()); // song URI
         values.put(MED, session.getMED()); // med status
         values.put(DUR, session.getDuration()); // session duration (time)
         // Inserting Row
@@ -335,9 +339,9 @@ public class DBHelper extends SQLiteOpenHelper {
             cursor.moveToFirst();
 
         Session s = new Session();
-        s.setPID(cursor.getString(cursor.getColumnIndex(PID)));
+        s.setPID(cursor.getString(cursor.getColumnIndex(PIDs)));
         s.setDuration(cursor.getString(cursor.getColumnIndex(INIT)));
-        s.setURI(cursor.getString(cursor.getColumnIndex(URI)));
+        s.setURI(cursor.getString(cursor.getColumnIndex(URIs)));
         s.setMED(cursor.getString(cursor.getColumnIndex(MED)));
 
         // return session
@@ -345,11 +349,11 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     // Getting all sessions associated with a certain patient ID
-    List<Session> getAllSessionPatient(String pid) {
+    List<Session> getAllSessionPatient(Patient p) {
         List<Session> sessionsPID = new ArrayList<Session>();
 
-        String query = "select * from " + PATIENT_TABLE_NAME + " where "
-                + PID + " = " + pid;
+        String query = "select * from " + SESSION_TABLE_NAME + " where "
+                + PIDs + " = " + p.getID();
 
         Log.e(LOG, query); //record purposes
 
@@ -360,9 +364,9 @@ public class DBHelper extends SQLiteOpenHelper {
             do {
                 Session s = new Session();
                 s.setID(cursor.getString(cursor.getColumnIndex(SID)));
-                s.setPID(cursor.getString(cursor.getColumnIndex(PID)));
+                s.setPID(cursor.getString(cursor.getColumnIndex(PIDs)));
                 s.setDuration(cursor.getString(cursor.getColumnIndex(INIT)));
-                s.setURI(cursor.getString(cursor.getColumnIndex(URI)));
+                s.setURI(cursor.getString(cursor.getColumnIndex(URIs)));
                 s.setMED(cursor.getString(cursor.getColumnIndex(MED)));
                 sessionsPID.add(s);
             } while (cursor.moveToNext());
@@ -386,9 +390,9 @@ public class DBHelper extends SQLiteOpenHelper {
             do {
                 Session s = new Session();
                 s.setID(cursor.getString(cursor.getColumnIndex(SID)));
-                s.setPID(cursor.getString(cursor.getColumnIndex(PID)));
+                s.setPID(cursor.getString(cursor.getColumnIndex(PIDs)));
                 s.setDuration(cursor.getString(cursor.getColumnIndex(INIT)));
-                s.setURI(cursor.getString(cursor.getColumnIndex(URI)));
+                s.setURI(cursor.getString(cursor.getColumnIndex(URIs)));
                 s.setMED(cursor.getString(cursor.getColumnIndex(MED)));
                 // Adding session to list
                 sessionList.add(s);
@@ -403,8 +407,8 @@ public class DBHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(PID, s.getPID());
-        values.put(URI, s.getURI());
+        values.put(PIDs, s.getPID());
+        values.put(URIs, s.getURI());
         values.put(MED, s.getMED());
         values.put(DUR, s.getDuration());
         // updating row
