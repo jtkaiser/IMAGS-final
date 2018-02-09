@@ -25,7 +25,7 @@ public class PresessionActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_presession);
 
-        mPainTracker = PainTracker.get();
+        mPainTracker = PainTracker.get(this);
 
         mToken = getIntent().getStringExtra(EXTRA_TOKEN);
 

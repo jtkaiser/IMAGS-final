@@ -57,7 +57,7 @@ public class SessionActivity extends AppCompatActivity implements SpotifyPlayer.
         }
 
         mTrackData = TrackData.get();
-        mPainTracker = PainTracker.get();
+        mPainTracker = PainTracker.get(this);
 
         mSeekBar = (SeekBar) findViewById(R.id.session_seekbar);
         mSeekBar.setProgress(mPainTracker.getLastValue());

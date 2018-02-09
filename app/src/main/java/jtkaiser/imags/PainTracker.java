@@ -1,6 +1,7 @@
 package jtkaiser.imags;
 
 import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 /**
@@ -12,31 +13,33 @@ public class PainTracker {
 
     private int mLastValue;
 
-    private static Context applicationContext;
+    private DBHelper mDBHelper;
 
-    public static Context getApplicationContext() {
-        return applicationContext;
-    }
-
-    public static PainTracker get(){
+    public static PainTracker get(Context context){
         if (sPainTracker == null) {
-            sPainTracker = new PainTracker();
+            sPainTracker = new PainTracker(context);
         }
 
-        DBHelper dbH = new DBHelper(getApplicationContext()); //might be needed
-        PainLog value = new PainLog(sPainTracker.getLastValue()); //create painlog
-
-        dbH.createPainLogpain(value);
-        Log.d("Pain Rating: ", String.valueOf(value.getPain()));
-            ; //insert painlog with only a value in db
-            //db.getAllPainLogs(); //
-
-        dbH.closeDB();
         return sPainTracker;
     }
 
-    private PainTracker(){
+    private PainTracker(Context context){
+        mDBHelper = new DBHelper(context);
         mLastValue = 0;
+
+        PainLog value;
+        if(sPainTracker == null){
+            value = new PainLog(0);
+        }
+        else {
+            value = new PainLog(sPainTracker.getLastValue()); //create painlog
+        }
+        mDBHelper.createPainLogpain(value);
+        Log.d("Pain Rating: ", String.valueOf(value.getPain()));
+        ; //insert painlog with only a value in db
+        //db.getAllPainLogs(); //
+
+        mDBHelper.closeDB();
 
     }
 
