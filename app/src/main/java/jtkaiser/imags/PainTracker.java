@@ -14,6 +14,8 @@ public class PainTracker {
 
     private DBHelper mDBHelper;
 
+    //private static SQLiteDatabase db;
+
     public static PainTracker get(Context context){
         if (sPainTracker == null) {
             sPainTracker = new PainTracker(context);
@@ -33,10 +35,11 @@ public class PainTracker {
         else {
             value = new PainLog(sPainTracker.getLastValue()); //create painlog
         }
+        mDBHelper.getAllPain();
         mDBHelper.createPainLogpain(value);
         Log.d("Pain Rating: ", String.valueOf(value.getPain()));
         ; //insert painlog with only a value in db
-        //db.getAllPainLogs(); //
+        // //
 
         mDBHelper.closeDB();
 

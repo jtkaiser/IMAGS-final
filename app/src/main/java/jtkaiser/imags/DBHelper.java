@@ -25,28 +25,28 @@ public class DBHelper extends SQLiteOpenHelper {
 
     //table names
     public static final String SESSION_TABLE_NAME = "sessions";
-    public static final String PAIN_TABLE_NAME = "pain logs";
+    public static final String PAIN_TABLE_NAME = "painlogs";
     public static final String PATIENT_TABLE_NAME = "patients";
 
     //sessions table info
-    public static final String MED = "medication status";
-    public static final String DUR = "session duration";
-    public static final String SID = "session ID";
-    public static final String PIDs = "patient ID session";
-    public static final String URIs = "song URI";
+    public static final String MED = "MEDstatus";
+    public static final String DUR = "duration";
+    public static final String SID = "sessionSID";
+    public static final String PIDs = "sessionPID";
+    public static final String URIs = "songURI";
 
 
     //pain log table info
     public static final String timeStamp = "time";
-    public static final String painLVL = "pain level";
-    public static final String INIT = "initial start pain?";
-    public static final String SIDp = "session ID pain";
+    public static final String painLVL = "painLvl";
+    public static final String INIT = "isInitialStart";
+    public static final String SIDp = "painSID";
 
 
     //patients table info
-    public static final String firstN = "first name";
-    public static final String lastN = "last name";
-    public static final String PID = "patient ID";
+    public static final String firstN = "firstName";
+    public static final String lastN = "lastName";
+    public static final String PID = "patientSID";
     //pid obvi
 
 //table create statements (might need to remove cascade constraints)
@@ -57,7 +57,7 @@ public class DBHelper extends SQLiteOpenHelper {
         + PIDs + " varchar2(50), " + URIs + " varchar2(50), "
         + MED + " varchar2(20), " + DUR + " datetime, foreign key("
         + PIDs + ") references " + PATIENT_TABLE_NAME + "("
-        + PID + "));";
+        + PID + ") );";
         //+ "constraint Session_un unique (" + SID + "));";//"constraint Patient_pk primary key (" + SessionPID + ") constraint Patient_un unique (" + SessionPID + ") constraint Session_fk foreign key (" + SessionSID + ") references " + PAIN_TABLE_NAME + " (" + SessionSID + "));";
     //pain log table create sql query
     public static final String CREATE_PAINS_TABLE = "create table "
@@ -205,22 +205,21 @@ public class DBHelper extends SQLiteOpenHelper {
         // Select All Query
         String query = "select * from " + PAIN_TABLE_NAME;
 
-        Log.e(LOG, query);
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(query, null);
-
         // looping through all rows and adding to list
         if (cursor.moveToFirst()) {
             do {
                 PainLog pl = new PainLog();
                 pl.setPain(cursor.getColumnIndex(painLVL));
-          //      pl.setStart(cursor.getString(cursor.getColumnIndex(timeStamp)));
+                Log.e(LOG, String.valueOf(pl.getPain()));
 
                 // Adding painlog pl to list painlog list
                 painLogsList.add(pl);
             } while (cursor.moveToNext());
         }
         // return painlog list
+        Log.e(LOG, query);
         return painLogsList;
     }
 
