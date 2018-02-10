@@ -28,17 +28,19 @@ public class PainTracker {
         mDBHelper = new DBHelper(context);
         mLastValue = 0;
 
-        PainLog value;
+        PainLog value, test;
         if(sPainTracker == null){
             value = new PainLog(0);
         }
         else {
             value = new PainLog(sPainTracker.getLastValue()); //create painlog
         }
-        mDBHelper.getAllPain();
-        mDBHelper.createPainLogpain(value);
+        //test = new PainLog(null);
+        //mDBHelper.createPainLog(test);
+        //mDBHelper.createPainLogpain(value);
         Log.d("Pain Rating: ", String.valueOf(value.getPain()));
         ; //insert painlog with only a value in db
+        mDBHelper.getAllPain();
         // //
 
         mDBHelper.closeDB();

@@ -30,7 +30,7 @@ public class LoginActivity extends Activity implements ConnectionStateCallback, 
     private String userEmail;
     private Player mPlayer;
     private String mToken;
-    private int scount = 0;
+    //private int scount = 0;
 
     // Request code that will be used to verify if the result comes from correct activity
 // Can be any integer
@@ -89,16 +89,14 @@ public class LoginActivity extends Activity implements ConnectionStateCallback, 
         Log.d("LoginActivity", "User logged in");
         userEmail = "test";
         if(whiteListCheck()){
-
-            //DBHelper db = new DBHelper(this);
-            //Session s = new Session(String.valueOf(scount), userEmail);
-            //String sid = db.addSession(s);
-            //Log.d("Session: ", sid);
-            //db.closeDB();
-
             mTitle.setText(R.string.login_success);
             mText.setText(R.string.login_success_text);
             Toast.makeText(LoginActivity.this, "Logged in as " + userEmail, Toast.LENGTH_LONG).show();
+            //DBHelper db = new DBHelper(this);
+            //Session s = new Session(String.valueOf(scount++), userEmail);
+            //String sid = db.addSession(s);
+            //Log.d("Session: ", sid);
+            //db.closeDB();
         }
         else{
             mTitle.setText(R.string.login_bad);
