@@ -63,7 +63,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String CREATE_PAINS_TABLE = "create table "
             + PAIN_TABLE_NAME + "(" + SIDp + " varchar2(10), "
             + timeStamp + " datetime, " + painLVL + " number(2), "
-            + INIT + "varchar2(3), foreign key(" + SIDp + ") references "
+            + INIT + " varchar2(3), foreign key(" + SIDp + ") references "
             + SESSION_TABLE_NAME + "(" + SID + "));";
                  //, constraint Pain_ch check (" + painLVL + " between 0 and 10));";
     //patients table create sql query
