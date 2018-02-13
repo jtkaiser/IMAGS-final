@@ -3,6 +3,9 @@ package jtkaiser.imags;
 import android.content.Context;
 import android.util.Log;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by jtkai on 1/29/2018.
  */
@@ -13,6 +16,7 @@ public class PainTracker {
     private int mLastValue;
 
     private DatabaseHelper mDBHelper;
+    private List<PainLog> pList;
     //private static SQLiteDatabase db;
 
     public static PainTracker get(Context context){
@@ -26,6 +30,7 @@ public class PainTracker {
     private PainTracker(Context context){
         mDBHelper = new DatabaseHelper(context);
         mLastValue = 0;
+        pList = new ArrayList<PainLog>();
 
         PainLog value, test;
         if(sPainTracker == null){
@@ -39,9 +44,8 @@ public class PainTracker {
         mDBHelper.createPainLogpain(value);
         Log.d("Pain Rating: ", String.valueOf(value.getPain()));
         ; //insert painlog with only a value in db
-        mDBHelper.getAllPain();
+        pList = mDBHelper.getAllPain();
         // //
-
         mDBHelper.closeDatabase();
     }
 
