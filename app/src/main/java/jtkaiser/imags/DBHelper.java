@@ -308,23 +308,23 @@ public class DBHelper extends SQLiteOpenHelper {
         //db.close();
     }
 
-    // Adding new session
-    String addSession(Session session) {
+    // Adding new sessionData
+    String addSession(SessionData sessionData) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(SID, session.getSID()); // session ID
-        values.put(PID, session.getPID()); // patient ID
-        values.put(URI, session.getURI()); // song URI
-        values.put(MED, session.getMED()); // med status
-        values.put(DUR, session.getDuration()); // session duration (time)
+        values.put(SID, sessionData.getSID()); // sessionData ID
+        values.put(PID, sessionData.getPID()); // patient ID
+        values.put(URI, sessionData.getURI()); // song URI
+        values.put(MED, sessionData.getMED()); // med status
+        values.put(DUR, sessionData.getDuration()); // sessionData duration (time)
         // Inserting Row
         db.insert(SESSION_TABLE_NAME, null, values);
-        return session.getSID(); //db.close(); // Closing database connection
+        return sessionData.getSID(); //db.close(); // Closing database connection
     }
 
     // Getting single session
-    Session getSession(String sid) {
+    SessionData getSession(String sid) {
         SQLiteDatabase db = this.getReadableDatabase();
         String query = "select * from " + SESSION_TABLE_NAME
                 + " where " + SID + " = " + sid;
@@ -334,7 +334,7 @@ public class DBHelper extends SQLiteOpenHelper {
         if (cursor != null)
             cursor.moveToFirst();
 
-        Session s = new Session();
+        SessionData s = SessionData.get();
         s.setPID(cursor.getString(cursor.getColumnIndex(PID)));
         s.setDuration(cursor.getString(cursor.getColumnIndex(INIT)));
         s.setURI(cursor.getString(cursor.getColumnIndex(URI)));
@@ -345,8 +345,8 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     // Getting all sessions associated with a certain patient ID
-    List<Session> getAllSessionPatient(String pid) {
-        List<Session> sessionsPID = new ArrayList<Session>();
+    List<SessionData> getAllSessionPatient(String pid) {
+        List<SessionData> sessionsPID = new ArrayList<SessionData>();
 
         String query = "select * from " + PATIENT_TABLE_NAME + " where "
                 + PID + " = " + pid;
@@ -358,7 +358,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
         if (cursor.moveToFirst()) {
             do {
-                Session s = new Session();
+                SessionData s = SessionData.get();
                 s.setID(cursor.getString(cursor.getColumnIndex(SID)));
                 s.setPID(cursor.getString(cursor.getColumnIndex(PID)));
                 s.setDuration(cursor.getString(cursor.getColumnIndex(INIT)));
@@ -371,8 +371,8 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     // Getting All session
-    public List<Session> getAllSessions() {
-        List<Session> sessionList = new ArrayList<Session>();
+    public List<SessionData> getAllSessions() {
+        List<SessionData> sessionDataList = new ArrayList<SessionData>();
         // Select All Query
         String query = "select * from " + SESSION_TABLE_NAME;
 
@@ -384,22 +384,22 @@ public class DBHelper extends SQLiteOpenHelper {
         // looping through all rows and adding to list
         if (cursor.moveToFirst()) {
             do {
-                Session s = new Session();
+                SessionData s = SessionData.get();
                 s.setID(cursor.getString(cursor.getColumnIndex(SID)));
                 s.setPID(cursor.getString(cursor.getColumnIndex(PID)));
                 s.setDuration(cursor.getString(cursor.getColumnIndex(INIT)));
                 s.setURI(cursor.getString(cursor.getColumnIndex(URI)));
                 s.setMED(cursor.getString(cursor.getColumnIndex(MED)));
                 // Adding session to list
-                sessionList.add(s);
+                sessionDataList.add(s);
             } while (cursor.moveToNext());
         }
         // return session list
-        return sessionList;
+        return sessionDataList;
     }
 
     // Updating single session
-    public int updateSession(Session s) {
+    public int updateSession(SessionData s) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
@@ -413,7 +413,7 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     // Deleting single session
-    public void deleteSession(Session s) {
+    public void deleteSession(SessionData s) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(SESSION_TABLE_NAME, SID + " = ?",
                 new String[] { String.valueOf(s.getSID()) });

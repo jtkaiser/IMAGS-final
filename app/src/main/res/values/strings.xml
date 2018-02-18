@@ -18,7 +18,7 @@
     <string name="continue_button">Continue</string>
 
     <string name="presession_title">Before We Begin this Session...</string>
-    <string name="presession_text">During the duration of the session, we ask you to keep track of the intensity of the pain you are experiencing moment-to-moment. \nTo do so, simply manipulate the slider on the right by moving the circle up or down. The higher you move the circle, the worse the pain you are experiencing is.
+    <string name="presession_text">During the duration of the sessionData, we ask you to keep track of the intensity of the pain you are experiencing moment-to-moment. \nTo do so, simply manipulate the slider on the right by moving the circle up or down. The higher you move the circle, the worse the pain you are experiencing is.
         When you are ready, set the slider according to how you feel right now. Then, press the &quot;Continue&quot; button below to continue.</string>
 
     <string name="search_title">Search for Music</string>
@@ -41,7 +41,7 @@
     <string name="no_button">No</string>
 
     <string name="postsession_title">Thank You!</string>
-    <string name="postsession_text">That concludes this session.\nPlease tap the button below to logout.</string>
+    <string name="postsession_text">That concludes this sessionData.\nPlease tap the button below to logout.</string>
     <string name="logout_button">Logout</string>
 
     <string name="cover_art_description">Cover art</string>

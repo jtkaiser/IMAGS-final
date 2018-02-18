@@ -4,42 +4,29 @@ package jtkaiser.imags;
  * Created by amybea on 1/29/2018.
  */
 
-public class Session {
+public class SessionData {
 
-    String SID;
-    String PID;
-    String URI;
-    String MED;
-    String DUR;
+    private static SessionData sSessionData;
+
+    private String SID;
+    private String PID;
+    private String URI;
+    private String MED;
+    private String DUR;
 
 
-    // Empty constructor
-    public Session(){
+    private SessionData(){
 
     }
 
-    // constructor
-    public Session(String sid, String pid){
-        this.SID = sid;
-        this.PID = pid;
+    public static SessionData get(){
+        if(sSessionData == null){
+            sSessionData = new SessionData();
+        }
+        return sSessionData;
     }
 
-    // constructor
-    public Session(String sid, String pid, String uri, String time){
-        this.SID = sid;
-        this.PID = pid;
-        this.URI = uri;
-        this.DUR = time;
-    }
 
-    // constructor
-    public Session(String sid, String pid, String uri, String med, String time){
-        this.SID = sid;
-        this.PID = pid;
-        this.URI = uri;
-        this.MED = med;
-        this.DUR = time;
-    }
 
     // getting SID
     public String getSID(){
