@@ -229,7 +229,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     //session table methods
     // Adding new session
-    String createSession(Session session) {
+    public void createSession(Session session) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
@@ -240,7 +240,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(DUR, session.getDuration()); // session duration (time)
         // Inserting Row
         db.insert(SESSION_TABLE_NAME, null, values);
-        return session.getSID();
+        //return session.getSID();
     }
 
     // Getting single session

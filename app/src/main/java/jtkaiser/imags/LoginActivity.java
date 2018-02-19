@@ -21,6 +21,8 @@ import com.spotify.sdk.android.player.Player;
 import com.spotify.sdk.android.player.PlayerEvent;
 import com.spotify.sdk.android.player.Spotify;
 
+import java.util.UUID;
+
 public class LoginActivity extends Activity implements ConnectionStateCallback, Player.NotificationCallback {
 
     private static final String CLIENT_ID = "0e496f3bf31344c0aaf87a89ea883e0d";
@@ -33,9 +35,10 @@ public class LoginActivity extends Activity implements ConnectionStateCallback, 
     private String userEmail;
     private Player mPlayer;
     private String mToken;
-    private int scount = 0;
     private DatabaseHelper mDBHelper;
-    private String SID;
+    private UUID SID;
+    Session s = new Session();
+    String start;
 
     // Request code that will be used to verify if the result comes from correct activity
 // Can be any integer
@@ -94,15 +97,19 @@ public class LoginActivity extends Activity implements ConnectionStateCallback, 
         Log.d("LoginActivity", "User logged in");
         userEmail = "test";
         if(whiteListCheck()){
-            SID = userEmail + String.valueOf(scount);
+            //database stuff
+            //Session s = new Session();
+            SID = s.generateUUSID(userEmail);
+            s.setID(SID);
+            s.setPID(userEmail);
+            mDBHelper = new DatabaseHelper(this);
+            mDBHelper.createSession(s);
+            //Log.d("Session: ", );
+            mDBHelper.closeDatabase();
+            //app stuff
             mTitle.setText(R.string.login_success);
             mText.setText(R.string.login_success_text);
             Toast.makeText(LoginActivity.this, "Logged in as " + userEmail, Toast.LENGTH_LONG).show();
-            mDBHelper = new DatabaseHelper(this);
-            Session s = new Session(SID,userEmail);
-            String sid = mDBHelper.createSession(s);
-            Log.d("Session: ", sid);
-            mDBHelper.closeDatabase();
         }
         else{
             mTitle.setText(R.string.login_bad);
