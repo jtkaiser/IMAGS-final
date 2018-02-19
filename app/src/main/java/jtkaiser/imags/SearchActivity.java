@@ -19,8 +19,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.List;
+import java.util.UUID;
 
 import kaaes.spotify.webapi.android.models.Track;
+
+import static jtkaiser.imags.PresessionActivity.EXTRA_SID;
 
 public class SearchActivity extends AppCompatActivity implements Search.View{
 
@@ -34,6 +37,7 @@ public class SearchActivity extends AppCompatActivity implements Search.View{
     private LinearLayoutManager mLayoutManager = new LinearLayoutManager(this);
     private ScrollListener mScrollListener = new ScrollListener(mLayoutManager);
     private SearchResultsAdapter mAdapter;
+    private UUID mSID;
 
 
 
@@ -58,6 +62,7 @@ public class SearchActivity extends AppCompatActivity implements Search.View{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
 
+        mSID = (UUID) getIntent().getSerializableExtra(EXTRA_SID);
         Intent intent = getIntent();
         String token = intent.getStringExtra(EXTRA_TOKEN);
 
@@ -87,7 +92,7 @@ public class SearchActivity extends AppCompatActivity implements Search.View{
             public void onItemSelected(View itemView, Track item) {
                 mActionListener.selectTrack(item);
                 TrackData.get().setTrack(item);
-                Intent i = new Intent(SearchActivity.this, SessionActivity.class);
+                Intent i = SessionActivity.newIntent(SearchActivity.this, mSID);
                 startActivity(i);
             }
         });
@@ -103,6 +108,12 @@ public class SearchActivity extends AppCompatActivity implements Search.View{
             String currentQuery = savedInstanceState.getString(KEY_CURRENT_QUERY);
             mActionListener.search(currentQuery);
         }
+    }
+
+    public static Intent newIntent(Context context, UUID SID) {
+        Intent i = new Intent(context, SearchActivity.class);
+        i.putExtra(EXTRA_SID, SID);
+        return i;
     }
 
     @Override

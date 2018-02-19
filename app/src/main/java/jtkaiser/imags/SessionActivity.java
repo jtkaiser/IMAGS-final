@@ -3,6 +3,7 @@ package jtkaiser.imags;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -24,6 +25,10 @@ import com.spotify.sdk.android.player.Spotify;
 import com.spotify.sdk.android.player.SpotifyPlayer;
 import com.squareup.picasso.Picasso;
 
+import java.util.UUID;
+
+import static jtkaiser.imags.PresessionActivity.EXTRA_SID;
+
 public class SessionActivity extends AppCompatActivity implements SpotifyPlayer.NotificationCallback, ConnectionStateCallback {
 
     private Button mPlayToggle;
@@ -42,15 +47,19 @@ public class SessionActivity extends AppCompatActivity implements SpotifyPlayer.
     private ImageView mFacesScale;
     private PainTracker mPainTracker;
     private String mToken;
+    private UUID mSID;
 
     private static final int REQUEST_CODE = 1337;
     private static final String CLIENT_ID = "0e496f3bf31344c0aaf87a89ea883e0d";
     private static final String REDIRECT_URI = "unique://callback";
+    private static final String DIALOG_HELP = "HelpDialog";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_session);
+
+        mSID = (UUID) getIntent().getSerializableExtra(EXTRA_SID);
 
         if(mPlayer != null){
             Spotify.destroyPlayer(mPlayer);
@@ -127,6 +136,16 @@ public class SessionActivity extends AppCompatActivity implements SpotifyPlayer.
                     processTouch(event.getX());
                 }
                 return true;
+            }
+        });
+
+        mHelpButton = (Button) findViewById(R.id.session_help);
+        mHelpButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentManager manager = getSupportFragmentManager();
+                HelpDialogFragment dialog = new HelpDialogFragment();
+                dialog.show(manager, DIALOG_HELP);
             }
         });
 
@@ -264,6 +283,12 @@ public class SessionActivity extends AppCompatActivity implements SpotifyPlayer.
             progressVal = 10;
         }
         mSeekBar.setProgress(progressVal);
+    }
+
+    public static Intent newIntent(Context context, UUID SID) {
+        Intent i = new Intent(context, SessionActivity.class);
+        i.putExtra(EXTRA_SID, SID);
+        return i;
     }
 
 }

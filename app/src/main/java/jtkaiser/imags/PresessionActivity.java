@@ -2,6 +2,7 @@ package jtkaiser.imags;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MotionEvent;
@@ -10,12 +11,18 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 
+import java.util.UUID;
+
 public class PresessionActivity extends AppCompatActivity {
 
-    static final String EXTRA_TOKEN = "EXTRA_TOKEN";
+    private static final String DIALOG_HELP = "HelpDialog";
+
+    static final String EXTRA_TOKEN = "imags.token";
+    static final String EXTRA_SID = "imags.sid";
     private Button mContinueButton;
     private Button mHelpButton;
     private String mToken;
+    private UUID mSID;
     private SeekBar mSeekBar;
     private PainTracker mPainTracker;
     private ImageView mFacesScale;
@@ -27,13 +34,15 @@ public class PresessionActivity extends AppCompatActivity {
 
         mPainTracker = PainTracker.get(this);
 
+        mSID = (UUID) getIntent().getSerializableExtra(EXTRA_SID);
+
         mToken = getIntent().getStringExtra(EXTRA_TOKEN);
 
         mContinueButton = (Button) findViewById(R.id.presession_continue);
         mContinueButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = SearchActivity.createIntent(PresessionActivity.this);
+                Intent i = SearchActivity.newIntent(PresessionActivity.this, mSID);
                 i.putExtra(SearchActivity.EXTRA_TOKEN, mToken);
                 startActivity(i);
             }
@@ -68,10 +77,22 @@ public class PresessionActivity extends AppCompatActivity {
                 return true;
             }
         });
+
+        mHelpButton = (Button) findViewById(R.id.presession_help);
+        mHelpButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentManager manager = getSupportFragmentManager();
+                HelpDialogFragment dialog = new HelpDialogFragment();
+                dialog.show(manager, DIALOG_HELP);
+            }
+        });
     }
 
-    public static Intent createIntent(Context context) {
-        return new Intent(context, PresessionActivity.class);
+    public static Intent newIntent(Context context, UUID SID) {
+        Intent i = new Intent(context, PresessionActivity.class);
+        i.putExtra(EXTRA_SID, SID);
+        return i;
     }
 
     private void processTouch(float xPos){

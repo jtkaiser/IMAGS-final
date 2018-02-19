@@ -17,7 +17,8 @@
             android:layout_height="wrap_content"
             android:text="@string/postsession_title"
             android:textSize="30dp"
-            android:padding="20dp"/>
+            android:padding="20dp"
+            android:textStyle="bold"/>
 
         <TextView
             android:layout_width="wrap_content"

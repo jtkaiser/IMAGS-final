@@ -19,7 +19,7 @@ import java.util.Locale;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
     //for log(cat?) ; tag
-    private static final String LOG = "DatabaseHelper";
+    private static final String TAG = "DatabaseHelper";
 
     //database version
     private static final int DATABASE_VERSION = 1;
@@ -165,7 +165,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         String query = "select * from " + PATIENT_TABLE_NAME + " where "
                 + PID + " = " + id;
 
-        Log.e(LOG, query); //record purposes
+        Log.e(TAG, query); //record purposes
 
         Cursor cursor = db.rawQuery(query, null);
         if (cursor != null)
@@ -186,7 +186,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         String query = "SELECT  * FROM " + PATIENT_TABLE_NAME;
 
-        Log.e(LOG, query); //record purposes
+        Log.e(TAG, query); //record purposes
 
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(query, null);
@@ -229,11 +229,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     //session table methods
     // Adding new session
-    public void createSession(Session session) {
+    public void createSession(SessionData session) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(SID, session.getSID()); // session ID
+        values.put(SID, session.getSID().toString()); // session ID
         values.put(PIDs, session.getPID()); // patient ID
         values.put(URIs, session.getURI()); // song URI
         values.put(MED, session.getMED()); // med status
@@ -244,84 +244,86 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     // Getting single session
-    Session getSession(String sid) {
-        SQLiteDatabase db = this.getReadableDatabase();
-        String query = "select * from " + SESSION_TABLE_NAME
-                + " where " + SID + " = " + sid;
+//    SessionData getSession(String sid) {
+//        SQLiteDatabase db = this.getReadableDatabase();
+//        String query = "select * from " + SESSION_TABLE_NAME
+//                + " where " + SID + " = " + sid;
+//
+//        Log.e(TAG, query);
+//        Cursor cursor = db.rawQuery(query, null);
+//        if (cursor != null)
+//            cursor.moveToFirst();
+//
+//        SessionData s = SessionData.get();
+//        s.setPID(cursor.getString(cursor.getColumnIndex(PIDs)));
+//        s.setDuration(cursor.getString(cursor.getColumnIndex(INIT)));
+//        s.setURI(cursor.getString(cursor.getColumnIndex(URIs)));
+//        s.setMED(cursor.getString(cursor.getColumnIndex(MED)));
+//        s.setID(cursor.getString(cursor.getColumnIndex(SID)));
+//
+//        // return session
+//        return s;
+//    }
 
-        Log.e(LOG, query);
-        Cursor cursor = db.rawQuery(query, null);
-        if (cursor != null)
-            cursor.moveToFirst();
+//    // Getting all sessions associated with a certain patient ID
+//    List<Session> getAllSessionPatient(Patient p) {
+//        List<Session> sessionsPID = new ArrayList<Session>();
+//
+//        String query = "select * from " + SESSION_TABLE_NAME + " where "
+//                + PIDs + " = " + p.getID();
+//
+//        Log.e(TAG, query); //record purposes
+//
+//        SQLiteDatabase db = this.getReadableDatabase();
+//        Cursor cursor = db.rawQuery(query, null);
+//
+//        if (cursor.moveToFirst()) {
+//            do {
+//                Session s = new Session();
+//                s.setID(cursor.getString(cursor.getColumnIndex(SID)));
+//                s.setPID(cursor.getString(cursor.getColumnIndex(PIDs)));
+//                s.setDuration(cursor.getString(cursor.getColumnIndex(INIT)));
+//                s.setURI(cursor.getString(cursor.getColumnIndex(URIs)));
+//                s.setMED(cursor.getString(cursor.getColumnIndex(MED)));
+//                sessionsPID.add(s);
+//            } while (cursor.moveToNext());
+//        }
+//        return sessionsPID;
+//    }
 
-        Session s = new Session();
-        s.setPID(cursor.getString(cursor.getColumnIndex(PIDs)));
-        s.setDuration(cursor.getString(cursor.getColumnIndex(INIT)));
-        s.setURI(cursor.getString(cursor.getColumnIndex(URIs)));
-        s.setMED(cursor.getString(cursor.getColumnIndex(MED)));
-        s.setID(cursor.getString(cursor.getColumnIndex(SID)));
-
-        // return session
-        return s;
-    }
-
-    // Getting all sessions associated with a certain patient ID
-    List<Session> getAllSessionPatient(Patient p) {
-        List<Session> sessionsPID = new ArrayList<Session>();
-
-        String query = "select * from " + SESSION_TABLE_NAME + " where "
-                + PIDs + " = " + p.getID();
-
-        Log.e(LOG, query); //record purposes
-
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery(query, null);
-
-        if (cursor.moveToFirst()) {
-            do {
-                Session s = new Session();
-                s.setID(cursor.getString(cursor.getColumnIndex(SID)));
-                s.setPID(cursor.getString(cursor.getColumnIndex(PIDs)));
-                s.setDuration(cursor.getString(cursor.getColumnIndex(INIT)));
-                s.setURI(cursor.getString(cursor.getColumnIndex(URIs)));
-                s.setMED(cursor.getString(cursor.getColumnIndex(MED)));
-                sessionsPID.add(s);
-            } while (cursor.moveToNext());
-        }
-        return sessionsPID;
-    }
-
-    // Getting All session
-    public List<Session> getAllSessions() {
-        List<Session> sessionList = new ArrayList<Session>();
-        // Select All Query
-        String query = "select * from " + SESSION_TABLE_NAME;
-
-        Log.e(LOG, query);
-
-        SQLiteDatabase db = this.getWritableDatabase();
-        Cursor cursor = db.rawQuery(query, null);
-
-        // looping through all rows and adding to list
-        if (cursor.moveToFirst()) {
-            do {
-                Session s = new Session();
-                s.setID(cursor.getString(cursor.getColumnIndex(SID)));
-                s.setPID(cursor.getString(cursor.getColumnIndex(PIDs)));
-                s.setDuration(cursor.getString(cursor.getColumnIndex(INIT)));
-                s.setURI(cursor.getString(cursor.getColumnIndex(URIs)));
-                s.setMED(cursor.getString(cursor.getColumnIndex(MED)));
-                // Adding session to list
-                sessionList.add(s);
-            } while (cursor.moveToNext());
-        }
-        // return session list
-        return sessionList;
-    }
+//    // Getting All session
+//    public List<Session> getAllSessions() {
+//        List<Session> sessionList = new ArrayList<Session>();
+//        // Select All Query
+//        String query = "select * from " + SESSION_TABLE_NAME;
+//
+//        Log.e(LOG, query);
+//
+//        SQLiteDatabase db = this.getWritableDatabase();
+//        Cursor cursor = db.rawQuery(query, null);
+//
+//        // looping through all rows and adding to list
+//        if (cursor.moveToFirst()) {
+//            do {
+//                Session s = new Session();
+//                s.setID(cursor.getString(cursor.getColumnIndex(SID)));
+//                s.setPID(cursor.getString(cursor.getColumnIndex(PIDs)));
+//                s.setDuration(cursor.getString(cursor.getColumnIndex(INIT)));
+//                s.setURI(cursor.getString(cursor.getColumnIndex(URIs)));
+//                s.setMED(cursor.getString(cursor.getColumnIndex(MED)));
+//                // Adding session to list
+//                sessionList.add(s);
+//            } while (cursor.moveToNext());
+//        }
+//        // return session list
+//        return sessionList;
+//    }
 
     // Updating single session (must have sid attached
-    public int updateSession(Session s) {
+    public int updateSession() {
         SQLiteDatabase db = this.getWritableDatabase();
+
+        SessionData s = SessionData.get();
 
         ContentValues values = new ContentValues();
         values.put(PIDs, s.getPID());
@@ -334,13 +336,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 new String[] { String.valueOf(s.getSID()) });
     }
 
-    // Deleting single session
-    public void deleteSession(Session s) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        db.delete(SESSION_TABLE_NAME, SID + " = ?",
-                new String[] { String.valueOf(s.getSID()) });
-        //db.close();
-    }
+//    // Deleting single session
+//    public void deleteSession(Session s) {
+//        SQLiteDatabase db = this.getWritableDatabase();
+//        db.delete(SESSION_TABLE_NAME, SID + " = ?",
+//                new String[] { String.valueOf(s.getSID()) });
+//        //db.close();
+//    }
 
     //painlog table methods
     // Adding new painlog row into the table
@@ -357,30 +359,30 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.insert(PAIN_TABLE_NAME, null, values);
     }
 
-    // Getting all pain logs associated with a certain session ID
-    List<PainLog> getAllSessionPain(String sid) {
-        List<PainLog> painLogSID = new ArrayList<PainLog>();
-
-        String query = "select * from " + PATIENT_TABLE_NAME + " where "
-                + SIDp + " = " + sid;
-
-        Log.e(LOG, query); //record purposes
-
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery(query, null);
-
-        if (cursor.moveToFirst()) {
-            do {
-                PainLog pl = new PainLog();
-                pl.setSID(cursor.getString(cursor.getColumnIndex(SIDp)));
-                pl.setStart(cursor.getString(cursor.getColumnIndex(timeStamp)));
-                pl.setPain(cursor.getColumnIndex(painLVL));
-                pl.setInit(cursor.getString(cursor.getColumnIndex(INIT)));
-                painLogSID.add(pl);
-            } while (cursor.moveToNext());
-        }
-        return painLogSID;
-    }
+//    // Getting all pain logs associated with a certain session ID
+//    List<PainLog> getAllSessionPain(String sid) {
+//        List<PainLog> painLogSID = new ArrayList<PainLog>();
+//
+//        String query = "select * from " + PATIENT_TABLE_NAME + " where "
+//                + SIDp + " = " + sid;
+//
+//        Log.e(LOG, query); //record purposes
+//
+//        SQLiteDatabase db = this.getReadableDatabase();
+//        Cursor cursor = db.rawQuery(query, null);
+//
+//        if (cursor.moveToFirst()) {
+//            do {
+//                PainLog pl = new PainLog();
+//                pl.setSID(cursor.getString(cursor.getColumnIndex(SIDp)));
+//                pl.setStart(cursor.getString(cursor.getColumnIndex(timeStamp)));
+//                pl.setPain(cursor.getColumnIndex(painLVL));
+//                pl.setInit(cursor.getString(cursor.getColumnIndex(INIT)));
+//                painLogSID.add(pl);
+//            } while (cursor.moveToNext());
+//        }
+//        return painLogSID;
+//    }
 
     // Getting All painlogs
     public List<PainLog> getAllPainLogs() {
@@ -388,7 +390,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         // Select All Query
         String query = "select * from " + PAIN_TABLE_NAME;
 
-        Log.e(LOG, query);
+        Log.e(TAG, query);
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(query, null);
 
@@ -423,13 +425,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 new String[] { String.valueOf(pl.getSID()) });
     }
 
-    // Deleting single painlog (need sid
-    public void deletePainLog(PainLog pl) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        db.delete(PAIN_TABLE_NAME, SIDp + " = ?",
-                new String[] { String.valueOf(pl.getSID()) });
-        //db.close();
-    }
+//    // Deleting single painlog (need sid
+//    public void deletePainLog(PainLog pl) {
+//        SQLiteDatabase db = this.getWritableDatabase();
+//        db.delete(PAIN_TABLE_NAME, SIDp + " = ?",
+//                new String[] { String.valueOf(pl.getSID()) });
+//        //db.close();
+//    }
 
 
     //songs table methods
@@ -468,14 +470,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             do {
                 PainLog pl = new PainLog();
                 pl.setPain(cursor.getColumnIndex(painLVL));
-                Log.e(LOG, String.valueOf(pl.getPain()));
+                Log.e(TAG, String.valueOf(pl.getPain()));
 
                 // Adding painlog pl to list painlog list
                 painLogsList.add(pl);
             } while (cursor.moveToNext());
         }
         // return painlog list
-        Log.e(LOG, query);
+        Log.e(TAG, query);
         return painLogsList;
     }
 }

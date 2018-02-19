@@ -6,6 +6,8 @@ package jtkaiser.imags;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -22,10 +24,13 @@ import com.spotify.sdk.android.player.Player;
 import com.spotify.sdk.android.player.PlayerEvent;
 import com.spotify.sdk.android.player.Spotify;
 
-public class LoginActivity extends Activity implements ConnectionStateCallback, Player.NotificationCallback {
+import java.util.UUID;
+
+public class LoginActivity extends AppCompatActivity implements ConnectionStateCallback, Player.NotificationCallback {
 
     private static final String CLIENT_ID = "0e496f3bf31344c0aaf87a89ea883e0d";
     private static final String REDIRECT_URI = "unique://callback";
+    private static final String DIALOG_HELP = "HelpDialog";
 
     private TextView mTitle;
     private TextView mText;
@@ -35,9 +40,8 @@ public class LoginActivity extends Activity implements ConnectionStateCallback, 
     private Player mPlayer;
     private String mToken;
     private DatabaseHelper mDBHelper;
-    private String SID;
-    Session s = new Session();
-    String start;
+    private UUID mSID;
+//    String start;
 
     // Request code that will be used to verify if the result comes from correct activity
 // Can be any integer
@@ -56,7 +60,7 @@ public class LoginActivity extends Activity implements ConnectionStateCallback, 
             @Override
             public void onClick(View v) {
                 Spotify.destroyPlayer(this);
-                Intent i = PresessionActivity.createIntent(LoginActivity.this);
+                Intent i = PresessionActivity.newIntent(LoginActivity.this, mSID);
                 i.putExtra(PresessionActivity.EXTRA_TOKEN, mToken);
                 startActivity(i);
             }
@@ -66,6 +70,9 @@ public class LoginActivity extends Activity implements ConnectionStateCallback, 
         mHelpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                FragmentManager manager = getSupportFragmentManager();
+                HelpDialogFragment dialog = new HelpDialogFragment();
+                dialog.show(manager, DIALOG_HELP);
             }
         });
 
@@ -97,16 +104,16 @@ public class LoginActivity extends Activity implements ConnectionStateCallback, 
         userEmail = "test";
         if(whiteListCheck()){
             //database stuff
-            //Session s = new Session();
-            SID = s.generateUUSID(userEmail);
-            s.setID(SID);
+            SessionData s = SessionData.get();
+            mSID = UUID.randomUUID();
+            s.setID(mSID);
             s.setPID(userEmail);
             mDBHelper = new DatabaseHelper(this);
             mDBHelper.createSession(s);
-            start = mDBHelper.getDateTime();
-            Log.d("Time(startof session): ", start);
+            s.setStartTime(mDBHelper.getDateTime());
+            Log.d("Time(startof session): ", mDBHelper.getDateTime());
             mDBHelper.closeDatabase();
-            Log.d("Session: ", s.getSID());
+            Log.d("Session: ", s.getSID().toString());
             Log.d("Session: ", s.getPID());
             //app stuff
             mTitle.setText(R.string.login_success);
