@@ -104,8 +104,10 @@ public class LoginActivity extends Activity implements ConnectionStateCallback, 
             mDBHelper = new DatabaseHelper(this);
             mDBHelper.createSession(s);
             start = mDBHelper.getDateTime();
+            Log.d("Time(startof session): ", start);
             mDBHelper.closeDatabase();
             Log.d("Session: ", s.getSID());
+            Log.d("Session: ", s.getPID());
             //app stuff
             mTitle.setText(R.string.login_success);
             mText.setText(R.string.login_success_text);
