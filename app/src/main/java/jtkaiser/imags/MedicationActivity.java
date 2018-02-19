@@ -1,5 +1,5 @@
 package jtkaiser.imags;
-
+//add to current session med status
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
