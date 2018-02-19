@@ -1,8 +1,10 @@
 package jtkaiser.imags;
 
 import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by jtkai on 1/29/2018.
@@ -13,7 +15,9 @@ public class PainTracker {
 
     private int mLastValue;
 
-    private DBHelper mDBHelper;
+    private DatabaseHelper mDBHelper;
+    private List<PainLog> pList;
+    //private static SQLiteDatabase db;
 
     public static PainTracker get(Context context){
         if (sPainTracker == null) {
@@ -24,23 +28,25 @@ public class PainTracker {
     }
 
     private PainTracker(Context context){
-        mDBHelper = new DBHelper(context);
+        mDBHelper = new DatabaseHelper(context);
         mLastValue = 0;
+        pList = new ArrayList<PainLog>();
 
-        PainLog value;
+        PainLog value, test;
         if(sPainTracker == null){
             value = new PainLog(0);
         }
         else {
             value = new PainLog(sPainTracker.getLastValue()); //create painlog
         }
+        //test = new PainLog(null);
+        //mDBHelper.createPainLog(test);
         mDBHelper.createPainLogpain(value);
         Log.d("Pain Rating: ", String.valueOf(value.getPain()));
         ; //insert painlog with only a value in db
-        //db.getAllPainLogs(); //
-
-        mDBHelper.closeDB();
-
+        pList = mDBHelper.getAllPain();
+        // //
+        mDBHelper.closeDatabase();
     }
 
     public int getLastValue(){
