@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+//import android.R;
 
 import com.spotify.sdk.android.authentication.AuthenticationClient;
 import com.spotify.sdk.android.authentication.AuthenticationRequest;
@@ -20,8 +21,6 @@ import com.spotify.sdk.android.player.Error;
 import com.spotify.sdk.android.player.Player;
 import com.spotify.sdk.android.player.PlayerEvent;
 import com.spotify.sdk.android.player.Spotify;
-
-import java.util.UUID;
 
 public class LoginActivity extends Activity implements ConnectionStateCallback, Player.NotificationCallback {
 
@@ -36,7 +35,7 @@ public class LoginActivity extends Activity implements ConnectionStateCallback, 
     private Player mPlayer;
     private String mToken;
     private DatabaseHelper mDBHelper;
-    private UUID SID;
+    private String SID;
     Session s = new Session();
     String start;
 
@@ -104,8 +103,9 @@ public class LoginActivity extends Activity implements ConnectionStateCallback, 
             s.setPID(userEmail);
             mDBHelper = new DatabaseHelper(this);
             mDBHelper.createSession(s);
-            //Log.d("Session: ", );
+            start = mDBHelper.getDateTime();
             mDBHelper.closeDatabase();
+            Log.d("Session: ", s.getSID());
             //app stuff
             mTitle.setText(R.string.login_success);
             mText.setText(R.string.login_success_text);

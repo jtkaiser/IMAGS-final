@@ -10,6 +10,7 @@ public class MedicationActivity extends AppCompatActivity {
 
     private Button mYesbutton;
     private Button mNoButton;
+    private DatabaseHelper mDBHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -126,7 +126,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     //get datetime??
-    private String getDateTime() {
+    public String getDateTime() {
         SimpleDateFormat dateFormat = new SimpleDateFormat(
                 "yyyy-MM-dd HH:mm:ss", Locale.getDefault());
         Date date = new Date();
