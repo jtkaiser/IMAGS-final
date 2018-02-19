@@ -41,8 +41,11 @@ public class PainTracker {
         }
         //test = new PainLog(null);
         //mDBHelper.createPainLog(test);
+        value.setStart(mDBHelper.getDateTime());
+        //value.setSID();
         mDBHelper.createPainLogpain(value);
         Log.d("Pain Rating: ", String.valueOf(value.getPain()));
+        Log.d("Time: ", value.getStart());
         ; //insert painlog with only a value in db
         pList = mDBHelper.getAllPain();
         // //

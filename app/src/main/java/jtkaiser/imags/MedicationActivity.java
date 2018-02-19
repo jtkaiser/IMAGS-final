@@ -1,5 +1,5 @@
 package jtkaiser.imags;
-
+//add to current session med status
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -10,6 +10,7 @@ public class MedicationActivity extends AppCompatActivity {
 
     private Button mYesbutton;
     private Button mNoButton;
+    private DatabaseHelper mDBHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

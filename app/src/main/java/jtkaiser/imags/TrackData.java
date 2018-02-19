@@ -19,7 +19,7 @@ public class TrackData {
     private Track mTrack;
     private Boolean mIsNewTrack;
 
-    //private DBHelper db; //for later
+    private DatabaseHelper db; //for later
 
     public static TrackData get(){
         if (sTrackData == null) {

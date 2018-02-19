@@ -1,5 +1,8 @@
 package jtkaiser.imags;
 
+//create paitent
+//create session
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,6 +11,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+//import android.R;
 
 import com.spotify.sdk.android.authentication.AuthenticationClient;
 import com.spotify.sdk.android.authentication.AuthenticationRequest;
@@ -30,7 +34,10 @@ public class LoginActivity extends Activity implements ConnectionStateCallback, 
     private String userEmail;
     private Player mPlayer;
     private String mToken;
-    //private int scount = 0;
+    private DatabaseHelper mDBHelper;
+    private String SID;
+    Session s = new Session();
+    String start;
 
     // Request code that will be used to verify if the result comes from correct activity
 // Can be any integer
@@ -89,14 +96,22 @@ public class LoginActivity extends Activity implements ConnectionStateCallback, 
         Log.d("LoginActivity", "User logged in");
         userEmail = "test";
         if(whiteListCheck()){
+            //database stuff
+            //Session s = new Session();
+            SID = s.generateUUSID(userEmail);
+            s.setID(SID);
+            s.setPID(userEmail);
+            mDBHelper = new DatabaseHelper(this);
+            mDBHelper.createSession(s);
+            start = mDBHelper.getDateTime();
+            Log.d("Time(startof session): ", start);
+            mDBHelper.closeDatabase();
+            Log.d("Session: ", s.getSID());
+            Log.d("Session: ", s.getPID());
+            //app stuff
             mTitle.setText(R.string.login_success);
             mText.setText(R.string.login_success_text);
             Toast.makeText(LoginActivity.this, "Logged in as " + userEmail, Toast.LENGTH_LONG).show();
-            //DBHelper db = new DBHelper(this);
-            //Session s = new Session(String.valueOf(scount++), userEmail);
-            //String sid = db.addSession(s);
-            //Log.d("Session: ", sid);
-            //db.closeDB();
         }
         else{
             mTitle.setText(R.string.login_bad);
