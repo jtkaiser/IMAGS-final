@@ -32,7 +32,7 @@ public class PresessionActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_presession);
 
-        mPainTracker = PainTracker.get(this);
+        mPainTracker = PainTracker.get(this, mSID);
 
         mSID = (UUID) getIntent().getSerializableExtra(EXTRA_SID);
 

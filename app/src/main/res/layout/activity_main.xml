@@ -39,11 +39,11 @@
                 android:textSize="10sp" />
 
             <Button
-                android:id="@+id/welcome_proceed"
+                android:id="@+id/welcome_continue"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="24dp"
-                android:text="@string/welcome_proceed" />
+                android:text="@string/welcome_continue" />
 
         </LinearLayout>
 
@@ -52,7 +52,7 @@
             android:layout_height="119dp">
 
             <Button
-                android:id="@+id/main_help"
+                android:id="@+id/welcome_help"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"

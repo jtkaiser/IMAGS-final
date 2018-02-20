@@ -1,45 +1,51 @@
 package jtkaiser.imags;
 
+import java.util.UUID;
+
 /**
  * Created by amybea on 1/29/2018.
  */
 
 public class PainLog {
-    String SID;
+    UUID SID;
     String timeStsmp;
-    String inital;
+//    String inital;
     int PAIN;
 
-    // Empty constructor
-    public PainLog(){
-    }
+//    // Empty constructor
+//    public PainLog(){
+//    }
 
     // constructor
-    public PainLog(int pain){
-        this.PAIN = pain;
-    }
+//    public PainLog(int pain){
+//        this.PAIN = pain;
+//    }
 
     // constructor
-    public PainLog(String inital){
-        this.inital = inital;
-    }
+//    public PainLog(String inital){
+//        this.inital = inital;
+//    }
 
 
     // constructor
-    public PainLog(String sid, String start, int pain, String init){
+    private PainLog(UUID sid, String time, int pain){
         this.SID = sid;
-        this.timeStsmp = start;
+        this.timeStsmp = time;
         this.PAIN = pain;
-        this.inital = init;
+//        this.inital = init;
+    }
+
+    public static PainLog newLog(UUID sid, int level){
+        return new PainLog(sid, DatabaseHelper.getDateTime(), level);
     }
 
     // getting SID
-    public String getSID(){
+    public UUID getSID(){
         return this.SID;
     }
 
     // setting SID
-    public void setSID(String sid){
+    public void setSID(UUID sid){
         this.SID = sid;
     }
 
@@ -64,12 +70,12 @@ public class PainLog {
     }
 
     // getting initial status info
-    public String getInit(){
-        return this.inital;
-    }
+//    public String getInit(){
+//        return this.inital;
+//    }
 
     // setting initial status
-    public void setInit(String YN){
-        this.inital = YN;
-    }
+//    public void setInit(String YN){
+//        this.inital = YN;
+//    }
 }

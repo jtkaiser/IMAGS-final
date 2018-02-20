@@ -20,7 +20,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mProceedButton = (Button)findViewById(R.id.welcome_proceed);
+        mProceedButton = (Button)findViewById(R.id.welcome_continue);
         mProceedButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        mHelpButton = (Button)findViewById(R.id.main_help);
+        mHelpButton = (Button)findViewById(R.id.welcome_help);
         mHelpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

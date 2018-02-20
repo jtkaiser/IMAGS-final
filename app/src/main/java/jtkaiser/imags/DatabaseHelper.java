@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.UUID;
 
 
 public class DatabaseHelper extends SQLiteOpenHelper {
@@ -126,7 +127,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     //get datetime??
-    public String getDateTime() {
+    public static String getDateTime() {
         SimpleDateFormat dateFormat = new SimpleDateFormat(
                 "yyyy-MM-dd HH:mm:ss", Locale.getDefault());
         Date date = new Date();
@@ -350,10 +351,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(SIDp, painLog.getSID()); //associated
+        values.put(SIDp, painLog.getSID().toString()); //associated
         values.put(timeStamp, painLog.getStart()); // time
         values.put(painLVL, painLog.getPain()); // pain
-        values.put(INIT, painLog.getInit()); //is it initial?
+//        values.put(INIT, painLog.getInit()); //is it initial?
 
         // Inserting Row
         db.insert(PAIN_TABLE_NAME, null, values);
@@ -397,11 +398,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         // looping through all rows and adding to list
         if (cursor.moveToFirst()) {
             do {
-                PainLog pl = new PainLog();
-                pl.setSID(cursor.getString(cursor.getColumnIndex(SIDp)));
+                // FIX THIS!!
+                PainLog pl = PainLog.newLog(null, 0);
+                pl.setSID(UUID.fromString(cursor.getString(cursor.getColumnIndex(SIDp))));
                 pl.setPain(cursor.getColumnIndex(painLVL));
                 pl.setStart(cursor.getString(cursor.getColumnIndex(timeStamp)));
-                pl.setInit(cursor.getString(cursor.getColumnIndex(INIT)));
+//                pl.setInit(cursor.getString(cursor.getColumnIndex(INIT)));
 
                 // Adding painlog pl to list painlog list
                 painLogsList.add(pl);
@@ -418,7 +420,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         values.put(timeStamp, pl.getStart());
         values.put(painLVL, pl.getPain());
-        values.put(INIT, pl.getInit());
+//        values.put(INIT, pl.getInit());
 
         // updating row
         return db.update(PAIN_TABLE_NAME, values, SIDp + " = ?",
@@ -468,7 +470,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         // looping through all rows and adding to list
         if (cursor.moveToFirst()) {
             do {
-                PainLog pl = new PainLog();
+                // FIX THIS!!
+                PainLog pl = PainLog.newLog(null, 0);
                 pl.setPain(cursor.getColumnIndex(painLVL));
                 Log.e(TAG, String.valueOf(pl.getPain()));
 

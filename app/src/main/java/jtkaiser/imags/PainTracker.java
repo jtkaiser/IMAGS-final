@@ -5,6 +5,7 @@ import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Created by jtkai on 1/29/2018.
@@ -12,44 +13,25 @@ import java.util.List;
 
 public class PainTracker {
     private static PainTracker sPainTracker;
-
+    private UUID sid;
     private int mLastValue;
-
-    private DatabaseHelper mDBHelper;
     private List<PainLog> pList;
-    //private static SQLiteDatabase db;
 
-    public static PainTracker get(Context context){
+    public static PainTracker get(Context context, UUID sid){
         if (sPainTracker == null) {
-            sPainTracker = new PainTracker(context);
+            sPainTracker = new PainTracker(context, sid);
         }
 
         return sPainTracker;
     }
 
-    private PainTracker(Context context){
-        mDBHelper = new DatabaseHelper(context);
+    private PainTracker(Context context, UUID sid){
+        sid = sid;
         mLastValue = 0;
         pList = new ArrayList<PainLog>();
 
-        PainLog value, test;
-        if(sPainTracker == null){
-            value = new PainLog(0);
-        }
-        else {
-            value = new PainLog(sPainTracker.getLastValue()); //create painlog
-        }
-        //test = new PainLog(null);
-        //mDBHelper.createPainLog(test);
-        value.setStart(mDBHelper.getDateTime());
-        //value.setSID();
-        mDBHelper.createPainLogpain(value);
-        Log.d("Pain Rating: ", String.valueOf(value.getPain()));
-        Log.d("Time: ", value.getStart());
-        ; //insert painlog with only a value in db
-        pList = mDBHelper.getAllPain();
-        // //
-        mDBHelper.closeDatabase();
+//        pList = mDBHelper.getAllPain();
+//        mDBHelper.closeDatabase();
     }
 
     public int getLastValue(){
@@ -58,5 +40,6 @@ public class PainTracker {
 
     public void setValue(int value){
         mLastValue = value;
+        pList.add(PainLog.newLog(sid, value));
     }
 }

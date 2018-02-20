@@ -4,7 +4,8 @@
     <string name="welcome_text">If you are a registered participant in the study, you may log in using your personal Spotify account credentials on the following screen.
         If you are not currently officially registered with the study, you will not be able to log in or use this application.
         If you have any questions, comments, or concerned, please tap the Help button below.</string>
-    <string name="welcome_proceed">Proceed</string>
+    <string name="welcome_continue">Continue</string>
+    <string name="welcome_help">Help</string>
 
     <string name="help_button">Help</string>
     <string name="help_title">Help</string>
