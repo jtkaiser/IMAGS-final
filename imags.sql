@@ -1,5 +1,5 @@
 create table if not exists Songs (
-	URI varchar(50) primary key,
+	URI varchar(50),
 	Acousticness float(5),
 	AnalysisURL varchar(100),
 	Danceability float(5),
@@ -17,16 +17,19 @@ create table if not exists Songs (
 	TrackHref varchar(100),
 	Valence float(5),
 	Progressions varchar(50),
+	primary key (URI)
 );
 
 
 create table if not exists Sessions (
-	SessionID char(36) primary key,
+	SessionID char(36),
 	PatientID varchar(50),
 	SongURI varchar(50),
 	BreakMED varchar(50),
 	SessionDURATION	datetime,
-	foreign key (SongURI) references Songs(URI)
+	primary key (sessionID),
+	FOREIGN KEY (SongURI)
+		REFERENCES Songs (URI)
 );
 
 
@@ -34,14 +37,15 @@ create table if not exists PainLog (
 	SessionID char(36),
 	SessionTime datetime,
 	PainLVL int(2),
-	foreign key (SessionID) references Sessions(SessionID)
+	FOREIGN KEY (SessionID) 
+		REFERENCES Sessions (SessionID)
 );
 
 
 
 create table if not exists Patients (
-	PatientID varchar(50) primary key,
-	foreign key (PatientID) references Sessions(PatientID)
+	PatientID varchar(50),
+	primary key (PatientID),
 );
 
 
