@@ -1,4 +1,7 @@
+SET FOREIGN_KEY_CHEKS = 0;
 drop table if exists Songs;
+SET FOREIGN_KEY_CHEKS = 1;
+
 create table if not exists Songs (
 	URI varchar(50),
 	Acousticness float(5),
@@ -21,7 +24,10 @@ create table if not exists Songs (
 	primary key (URI)
 );
 
+SET FOREIGN_KEY_CHEKS = 0;
 drop table if exists Sessions;
+SET FOREIGN_KEY_CHEKS = 1;
+
 create table if not exists Sessions (
 	SessionID char(36),
 	PatientID varchar(50),
@@ -31,21 +37,29 @@ create table if not exists Sessions (
 	primary key (sessionID),
 	FOREIGN KEY (SongURI)
 		REFERENCES Songs (URI)
-		ON UPDATE CASCADE ON DELETE SET NULL
+		ON UPDATE CASCADE ON DELETE CASCADE,
+	FOREIGN KEY (SongURI)
+		REFERENCES Songs (URI)
+		ON UPDATE CASCADE ON DELETE CASCADE
 );
 
+SET FOREIGN_KEY_CHEKS = 0;
 drop table if exists PainLog;
+SET FOREIGN_KEY_CHEKS = 1;
+
 create table if not exists PainLog (
 	SessionID char(36),
 	SessionTime datetime,
 	PainLVL int(2),
 	FOREIGN KEY (SessionID) 
 		REFERENCES Sessions (SessionID)
-		ON UPDATE CASCADE ON DELETE SET NULL
+		ON UPDATE CASCADE ON DELETE CASCADE
 );
 
-
+SET FOREIGN_KEY_CHEKS = 0;
 drop table if exists Patients;
+SET FOREIGN_KEY_CHEKS = 1;
+
 create table if not exists Patients (
 	PatientID varchar(50),
 	primary key (PatientID)
