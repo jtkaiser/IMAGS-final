@@ -1,4 +1,13 @@
 SET FOREIGN_KEY_CHECKS = 0;
+drop table if exists Patients;
+SET FOREIGN_KEY_CHECKS = 1;
+
+create table if not exists Patients (
+	PatientID varchar(50),
+	primary key (PatientID)
+);
+
+SET FOREIGN_KEY_CHECKS = 0;
 drop table if exists Songs;
 SET FOREIGN_KEY_CHECKS = 1;
 
@@ -35,8 +44,8 @@ create table if not exists Sessions (
 	BreakMED varchar(50),
 	SessionDURATION	datetime,
 	primary key (sessionID),
-	FOREIGN KEY (SongURI)
-		REFERENCES Songs (URI)
+	FOREIGN KEY (PatientID)
+		REFERENCES Patients (PatientID)
 		ON UPDATE CASCADE ON DELETE CASCADE,
 	FOREIGN KEY (SongURI)
 		REFERENCES Songs (URI)
@@ -56,14 +65,7 @@ create table if not exists PainLog (
 		ON UPDATE CASCADE ON DELETE CASCADE
 );
 
-SET FOREIGN_KEY_CHECKS = 0;
-drop table if exists Patients;
-SET FOREIGN_KEY_CHECKS = 1;
 
-create table if not exists Patients (
-	PatientID varchar(50),
-	primary key (PatientID)
-);
 
 
 
