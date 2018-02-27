@@ -1,3 +1,4 @@
+drop table if exists Songs;
 create table if not exists Songs (
 	URI varchar(50),
 	Acousticness float(5),
@@ -20,7 +21,7 @@ create table if not exists Songs (
 	primary key (URI)
 );
 
-
+drop table if exists Sessions;
 create table if not exists Sessions (
 	SessionID char(36),
 	PatientID varchar(50),
@@ -32,7 +33,7 @@ create table if not exists Sessions (
 		REFERENCES Songs (URI)
 );
 
-
+drop table if exists PainLog;
 create table if not exists PainLog (
 	SessionID char(36),
 	SessionTime datetime,
@@ -42,7 +43,7 @@ create table if not exists PainLog (
 );
 
 
-
+drop table if exists Patients;
 create table if not exists Patients (
 	PatientID varchar(50),
 	primary key (PatientID)
