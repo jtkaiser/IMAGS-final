@@ -1,9 +1,5 @@
--- IMAGS Data --
-
-drop table Songs cascade constraints;
-
-create table Songs (
-	URI		varchar2(50),
+create table if not exists Songs (
+	URI		varchar2(50) primary key,
 	Acousticness float(5),
 	AnalysisURL varchar2(100),
 	Danceability float(5),
@@ -21,45 +17,32 @@ create table Songs (
 	TrackHref varchar2(100),
 	Valence float(5),
 	Progressions varchar2(50),
-	constraint Songs_pk primary key (URI)
 );
 
--- Session ID naming convention is
--- 
-drop table Sessions cascade constraints;
 
-create table Sessions (
-	SessionID		char(36),
+create table if not exists Sessions (
+	SessionID		char(36) primary key,
 	PatientID		varchar2(50),
 	SongURI 	varchar2(50),
 	BreakMED		varchar2(50),
 	SessionDURATION		datetime,
-	constraint Session_pk primary key (SessionID),
-	constraint Song_fk foreign key (SongURI) references Songs (URI)
+	foreign key (SongURI) references Songs(URI)
 );
 
-drop table PainLog cascade constraints;
 
-create table PainLog (
+create table if not exists PainLog (
 	SessionID		char(36),
 	SessionTime			datetime,
 	PainLVL			number(2),
-	constraint Pain_fk foreign key (SessionID) references Sessions (SessionID),
-	constraint PainVal check (PainLVL between 0 and 10)	
+	foreign key (SessionID) references Sessions(SessionID)
 );
 
 
--- Patient ID naming convention is
--- 
-drop table Patients cascade constraints;
 
-create table Patients (
-	PatientID		varchar2(50),
-	constraint Patient_pk primary key (PatientID),
-	constraint Patient_fk foreign key (PatientID) references Sessions (PatientID)
+create table if not exists Patients (
+	PatientID		varchar2(50) primary key,
+	foreign key (PatientID) references Sessions(PatientID)
 );
-
-
 
 
 
