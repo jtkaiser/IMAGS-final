@@ -45,7 +45,7 @@ create table if not exists PainLog (
 
 create table if not exists Patients (
 	PatientID varchar(50),
-	primary key (PatientID),
+	primary key (PatientID)
 );
 
 
