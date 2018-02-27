@@ -31,6 +31,7 @@ create table if not exists Sessions (
 	primary key (sessionID),
 	FOREIGN KEY (SongURI)
 		REFERENCES Songs (URI)
+		ON DELETE CASCADE
 );
 
 drop table if exists PainLog;
@@ -40,6 +41,7 @@ create table if not exists PainLog (
 	PainLVL int(2),
 	FOREIGN KEY (SessionID) 
 		REFERENCES Sessions (SessionID)
+		ON DELETE CASCADE
 );
 
 
