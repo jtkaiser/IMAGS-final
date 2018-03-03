@@ -1,11 +1,8 @@
 package jtkaiser.imags;
 
 import android.content.Context;
-import android.util.Log;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import jtkaiser.imags.database.DataManager;
 
 /**
  * Created by jtkai on 1/29/2018.
@@ -13,25 +10,20 @@ import java.util.UUID;
 
 public class PainTracker {
     private static PainTracker sPainTracker;
-    private UUID sid;
+    private Context mContext;
     private int mLastValue;
-    private List<PainLog> pList;
 
-    public static PainTracker get(Context context, UUID sid){
+    public static PainTracker get(Context context){
         if (sPainTracker == null) {
-            sPainTracker = new PainTracker(context, sid);
+            sPainTracker = new PainTracker(context);
         }
 
         return sPainTracker;
     }
 
-    private PainTracker(Context context, UUID sid){
-        sid = sid;
+    private PainTracker(Context context){
+        mContext = context;
         mLastValue = 0;
-        pList = new ArrayList<PainLog>();
-
-//        pList = mDBHelper.getAllPain();
-//        mDBHelper.closeDatabase();
     }
 
     public int getLastValue(){
@@ -40,6 +32,6 @@ public class PainTracker {
 
     public void setValue(int value){
         mLastValue = value;
-        pList.add(PainLog.newLog(sid, value));
+        DataManager.get(mContext).createPainLogEntry();
     }
 }

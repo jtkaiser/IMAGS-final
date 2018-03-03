@@ -37,12 +37,16 @@
     <string name="new_song">New Song</string>
 
     <string name="medication_title">Lastly...</string>
-    <string name="medication_text">Did you take a dose of your prescribed medication?</string>
+    <string name="medication_text1">Did you take a dose of your prescribed medication?</string>
+    <string name="medication_text2">What is the name of that medication?</string>
+    <string name="medication_text3">What was the dosage you took?</string>
     <string name="yes_button">Yes</string>
     <string name="no_button">No</string>
+    <string name="submit_button">Submit</string>
+
 
     <string name="postsession_title">Thank You!</string>
-    <string name="postsession_text">That concludes this sessionData.\nPlease tap the button below to logout.</string>
+    <string name="postsession_text">That concludes this session.\nPlease tap the button below to logout.</string>
     <string name="logout_button">Logout</string>
 
     <string name="cover_art_description">Cover art</string>

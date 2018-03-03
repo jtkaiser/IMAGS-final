@@ -27,8 +27,8 @@ public class ResultsPresenter implements Search.ActionListener{
     private final Search.View mView;
     private String mCurrentQuery;
 
-    private SpotifySearcher mSearchPager;
-    private SpotifySearcher.CompleteListener mSearchListener;
+    private SearchPager mSearchPager;
+    private SearchPager.CompleteListener mSearchListener;
 
     private Player mPlayer;
 
@@ -61,7 +61,7 @@ public class ResultsPresenter implements Search.ActionListener{
             logError("No valid access token");
         }
 
-        mSearchPager = new SpotifySearcher(spotifyApi.getService());
+        mSearchPager = new SearchPager(spotifyApi.getService());
 
         mContext.bindService(PlayerService.getIntent(mContext), mServiceConnection, Activity.BIND_AUTO_CREATE);
     }
@@ -73,7 +73,7 @@ public class ResultsPresenter implements Search.ActionListener{
             logMessage("query text submit " + searchQuery);
             mCurrentQuery = searchQuery;
             mView.reset();
-            mSearchListener = new SpotifySearcher.CompleteListener() {
+            mSearchListener = new SearchPager.CompleteListener() {
                 @Override
                 public void onComplete(List<Track> items) {
                     mView.addData(items);

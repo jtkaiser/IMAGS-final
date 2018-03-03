@@ -15,7 +15,7 @@ import kaaes.spotify.webapi.android.models.Track;
 import kaaes.spotify.webapi.android.models.TracksPager;
 import retrofit.client.Response;
 
-public class SpotifySearcher {
+public class SearchPager {
     private final SpotifyService mSpotifyApi;
     private int mCurrentOffset;
     private int mPageSize;
@@ -26,7 +26,7 @@ public class SpotifySearcher {
         void onError(Throwable error);
     }
 
-    public SpotifySearcher(SpotifyService spotifyApi) {
+    public SearchPager(SpotifyService spotifyApi) {
         mSpotifyApi = spotifyApi;
     }
 

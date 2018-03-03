@@ -10,11 +10,9 @@ public class SessionData {
 
     private static SessionData sSessionData;
 
-    private UUID SID;
+    private String SID;
     private String PID;
     private String startTime;
-    private String URI;
-    private String MED;
     private String DUR;
 
 
@@ -29,15 +27,13 @@ public class SessionData {
         return sSessionData;
     }
 
-
-
     // getting SID
-    public UUID getSID(){
+    public String getSID(){
         return this.SID;
     }
 
     // setting session id
-    public void setID(UUID sid){
+    public void setID(String sid){
         this.SID = sid;
     }
 
@@ -46,7 +42,7 @@ public class SessionData {
         return this.PID;
     }
 
-    // setting patient ID
+    // setting participant ID
     public void setPID(String pid){
         this.PID = pid;
     }
@@ -57,26 +53,6 @@ public class SessionData {
 
     public void setStartTime(String time){
         startTime = time;
-    }
-
-    // getting URI
-    public String getURI(){
-        return this.URI;
-    }
-
-    // setting song URI
-    public void setURI(String uri){
-        this.URI = uri;
-    }
-
-    // getting med status
-    public String getMED(){
-        return this.MED;
-    }
-
-    // setting med status
-    public void setMED(String med){
-        this.MED = med;
     }
 
     // getting duration of session

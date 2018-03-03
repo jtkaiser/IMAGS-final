@@ -11,9 +11,9 @@ import android.util.Log;
 
 import java.io.IOException;
 
-public class PreviewPlayer implements Player, MediaPlayer.OnCompletionListener {
+public class SpotifyPlayer implements Player, MediaPlayer.OnCompletionListener {
 
-    private static final String TAG = PreviewPlayer.class.getSimpleName();
+    private static final String TAG = SpotifyPlayer.class.getSimpleName();
 
     private MediaPlayer mMediaPlayer;
     private String mCurrentTrack;

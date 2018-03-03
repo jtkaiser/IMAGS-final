@@ -22,7 +22,7 @@ public class PresessionActivity extends AppCompatActivity {
     private Button mContinueButton;
     private Button mHelpButton;
     private String mToken;
-    private UUID mSID;
+    private String mSID;
     private SeekBar mSeekBar;
     private PainTracker mPainTracker;
     private ImageView mFacesScale;
@@ -32,9 +32,9 @@ public class PresessionActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_presession);
 
-        mPainTracker = PainTracker.get(this, mSID);
+        mPainTracker = PainTracker.get(this);
 
-        mSID = (UUID) getIntent().getSerializableExtra(EXTRA_SID);
+        mSID = getIntent().getStringExtra(EXTRA_SID);
 
         mToken = getIntent().getStringExtra(EXTRA_TOKEN);
 
@@ -89,7 +89,7 @@ public class PresessionActivity extends AppCompatActivity {
         });
     }
 
-    public static Intent newIntent(Context context, UUID SID) {
+    public static Intent newIntent(Context context, String SID) {
         Intent i = new Intent(context, PresessionActivity.class);
         i.putExtra(EXTRA_SID, SID);
         return i;

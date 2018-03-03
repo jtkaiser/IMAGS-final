@@ -3,7 +3,6 @@ package jtkaiser.imags;
 //create paitent
 //create session
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
@@ -13,35 +12,38 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-//import android.R;
 
 import com.spotify.sdk.android.authentication.AuthenticationClient;
 import com.spotify.sdk.android.authentication.AuthenticationRequest;
 import com.spotify.sdk.android.authentication.AuthenticationResponse;
 import com.spotify.sdk.android.player.ConnectionStateCallback;
 import com.spotify.sdk.android.player.Error;
-import com.spotify.sdk.android.player.Player;
-import com.spotify.sdk.android.player.PlayerEvent;
 import com.spotify.sdk.android.player.Spotify;
 
-import java.util.UUID;
+import jtkaiser.imags.database.DataManager;
+import jtkaiser.imags.database.DatabaseHelper;
+import kaaes.spotify.webapi.android.SpotifyApi;
+import kaaes.spotify.webapi.android.SpotifyCallback;
+import kaaes.spotify.webapi.android.SpotifyError;
+import kaaes.spotify.webapi.android.SpotifyService;
+import kaaes.spotify.webapi.android.models.UserPrivate;
+import retrofit.client.Response;
 
-public class LoginActivity extends AppCompatActivity implements ConnectionStateCallback, Player.NotificationCallback {
+public class LoginActivity extends AppCompatActivity implements ConnectionStateCallback{
 
     private static final String CLIENT_ID = "0e496f3bf31344c0aaf87a89ea883e0d";
     private static final String REDIRECT_URI = "unique://callback";
     private static final String DIALOG_HELP = "HelpDialog";
+    private static final String TAG = "LoginActivity";
 
     private TextView mTitle;
     private TextView mText;
     private Button mContinueButton;
     private Button mHelpButton;
-    private String userEmail;
-    private Player mPlayer;
     private String mToken;
     private DatabaseHelper mDBHelper;
-    private UUID mSID;
-//    String start;
+    private String mSID;
+    private String mPID;
 
     // Request code that will be used to verify if the result comes from correct activity
 // Can be any integer
@@ -60,6 +62,7 @@ public class LoginActivity extends AppCompatActivity implements ConnectionStateC
             @Override
             public void onClick(View v) {
                 Spotify.destroyPlayer(this);
+//                Intent i = PostsessionActivity.newIntent(LoginActivity.this, mSID);
                 Intent i = PresessionActivity.newIntent(LoginActivity.this, mSID);
                 i.putExtra(PresessionActivity.EXTRA_TOKEN, mToken);
                 startActivity(i);
@@ -79,7 +82,7 @@ public class LoginActivity extends AppCompatActivity implements ConnectionStateC
         AuthenticationRequest.Builder builder = new AuthenticationRequest.Builder(CLIENT_ID,
                 AuthenticationResponse.Type.TOKEN,
                 REDIRECT_URI);
-        builder.setScopes(new String[]{"user-read-private", "streaming"});
+        builder.setScopes(new String[]{"user-read-private", "user-read-email", "streaming"});
         AuthenticationRequest request = builder.build();
 
         AuthenticationClient.openLoginActivity(this, REQUEST_CODE, request);
@@ -94,36 +97,13 @@ public class LoginActivity extends AppCompatActivity implements ConnectionStateC
             AuthenticationResponse response = AuthenticationClient.getResponse(resultCode, intent);
             if (response.getType() == AuthenticationResponse.Type.TOKEN) {
                     mToken = response.getAccessToken();
+                    processLogin();
             }
         }
     }
 
     @Override
     public void onLoggedIn() {
-        Log.d("LoginActivity", "User logged in");
-        userEmail = "test";
-        if(whiteListCheck()){
-            //database stuff
-            SessionData s = SessionData.get();
-            mSID = UUID.randomUUID();
-            s.setID(mSID);
-            s.setPID(userEmail);
-            mDBHelper = new DatabaseHelper(this);
-            mDBHelper.createSession(s);
-            s.setStartTime(mDBHelper.getDateTime());
-            Log.d("Time(startof session): ", mDBHelper.getDateTime());
-            mDBHelper.closeDatabase();
-            Log.d("Session: ", s.getSID().toString());
-            Log.d("Session: ", s.getPID());
-            //app stuff
-            mTitle.setText(R.string.login_success);
-            mText.setText(R.string.login_success_text);
-            Toast.makeText(LoginActivity.this, "Logged in as " + userEmail, Toast.LENGTH_LONG).show();
-        }
-        else{
-            mTitle.setText(R.string.login_bad);
-            mTitle.setText(R.string.login_bad_text);
-        }
     }
 
     @Override
@@ -154,19 +134,40 @@ public class LoginActivity extends AppCompatActivity implements ConnectionStateC
         return true;
     }
 
-    @Override
-    public void onPlaybackEvent(PlayerEvent playerEvent) {
+    private void processLogin(){
+        Log.d("LoginActivity", "User logged in");
+        SpotifyApi spotifyApi = new SpotifyApi();
 
-    }
+        if (mToken != null) {
 
-    @Override
-    public void onPlaybackError(Error error) {
+            spotifyApi.setAccessToken(mToken);
+        } else {
+            Log.e(TAG,"No valid access token");
+        }
 
-    }
+        SpotifyService s = spotifyApi.getService();
+        s.getMe(new SpotifyCallback<UserPrivate>() {
+            @Override
+            public void failure(SpotifyError spotifyError) {
+            }
 
-    @Override
-    protected void onDestroy() {
-        Spotify.destroyPlayer(this);
-        super.onDestroy();
+            @Override
+            public void success(UserPrivate userPrivate, Response response) {
+                mPID = userPrivate.email;
+                Log.d(TAG, "PID: " + mPID);
+                if(whiteListCheck()){
+                    Log.d(TAG, "now PID is "+ mPID);
+                    mTitle.setText(R.string.login_success);
+                    mText.setText(R.string.login_success_text);
+                    DataManager dm = DataManager.get(LoginActivity.this);
+                    dm.createSession(mPID);
+                    Toast.makeText(LoginActivity.this, "Logged in as " + mPID, Toast.LENGTH_LONG).show();
+                }
+                else{
+                    mTitle.setText(R.string.login_bad);
+                    mTitle.setText(R.string.login_bad_text);
+                }
+            }
+        });
     }
 }

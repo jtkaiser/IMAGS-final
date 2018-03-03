@@ -6,8 +6,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
 
-import java.util.UUID;
+import jtkaiser.imags.database.DataManager;
+import jtkaiser.imags.database.DatabaseHelper;
 
 import static jtkaiser.imags.PresessionActivity.EXTRA_SID;
 
@@ -15,21 +18,57 @@ public class MedicationActivity extends AppCompatActivity {
 
     private Button mYesbutton;
     private Button mNoButton;
+    private Button mSubmitButton;
+    private TextView mText;
+    private EditText mEditText;
     private DatabaseHelper mDBHelper;
-    private UUID mSID;
+    private String mSID;
+    private boolean mTookMed;
+    private String mName;
+    private String mDosage;
+    private int mQuestionNum;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_medication);
 
-        mSID = (UUID) getIntent().getSerializableExtra(EXTRA_SID);
+        mQuestionNum = 1;
+
+        mSID = getIntent().getStringExtra(EXTRA_SID);
+
+        mText = (TextView) findViewById(R.id.medication_text);
+
+        mEditText = (EditText) findViewById(R.id.answer_field);
+
+        mSubmitButton = (Button) findViewById(R.id.answer_submit);
+        mSubmitButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(mQuestionNum == 2){
+                    mName = mEditText.getText().toString();
+                    mEditText.setText("");
+                    mText.setText(getString(R.string.medication_text3));
+                    mQuestionNum++;
+                }
+                else if(mQuestionNum == 3){
+                    mDosage = mEditText.getText().toString();
+                    nextActivity();
+                }
+            }
+        });
 
         mYesbutton = (Button) findViewById(R.id.yes_button);
         mYesbutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                submit(true);
+                mTookMed = true;
+                mText.setText(getString(R.string.medication_text2));
+                mYesbutton.setVisibility(View.INVISIBLE);
+                mNoButton.setVisibility(View.INVISIBLE);
+                mEditText.setVisibility(View.VISIBLE);
+                mSubmitButton.setVisibility(View.VISIBLE);
+                mQuestionNum++;
             }
         });
 
@@ -37,17 +76,19 @@ public class MedicationActivity extends AppCompatActivity {
         mNoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                submit(false);
+                mTookMed = false;
+                nextActivity();
             }
         });
     }
 
-    private void submit(Boolean medStatus){
+    private void nextActivity(){
+        DataManager.get(this).createMedicationEntry(mTookMed, mName, mDosage);
         Intent i = PostsessionActivity.newIntent(MedicationActivity.this, mSID);
         startActivity(i);
     }
 
-    public static Intent newIntent(Context context, UUID SID) {
+    public static Intent newIntent(Context context, String SID) {
         Intent i = new Intent(context, MedicationActivity.class);
         i.putExtra(EXTRA_SID, SID);
         return i;

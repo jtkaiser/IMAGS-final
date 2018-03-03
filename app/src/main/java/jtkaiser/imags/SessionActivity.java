@@ -25,7 +25,8 @@ import com.spotify.sdk.android.player.Spotify;
 import com.spotify.sdk.android.player.SpotifyPlayer;
 import com.squareup.picasso.Picasso;
 
-import java.util.UUID;
+import kaaes.spotify.webapi.android.SpotifyApi;
+import kaaes.spotify.webapi.android.SpotifyService;
 
 import static jtkaiser.imags.PresessionActivity.EXTRA_SID;
 
@@ -36,7 +37,7 @@ public class SessionActivity extends AppCompatActivity implements SpotifyPlayer.
     private Button mHelpButton;
     private Button mNewSongButton;
     private Player mPlayer;
-    private TrackData mTrackData;
+    private TrackDataManager mTrackDataManager;
 
     private TextView mTrackTitle;
     private TextView mTrackArtist;
@@ -47,7 +48,8 @@ public class SessionActivity extends AppCompatActivity implements SpotifyPlayer.
     private ImageView mFacesScale;
     private PainTracker mPainTracker;
     private String mToken;
-    private UUID mSID;
+    private SpotifyService mService;
+    private String mSID;
 
     private static final int REQUEST_CODE = 1337;
     private static final String CLIENT_ID = "0e496f3bf31344c0aaf87a89ea883e0d";
@@ -59,14 +61,15 @@ public class SessionActivity extends AppCompatActivity implements SpotifyPlayer.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_session);
 
-        mSID = (UUID) getIntent().getSerializableExtra(EXTRA_SID);
+        mSID = getIntent().getStringExtra(EXTRA_SID);
 
         if(mPlayer != null){
             Spotify.destroyPlayer(mPlayer);
         }
 
-        mTrackData = TrackData.get();
-        mPainTracker = PainTracker.get(this, mSID);
+        mService = new SpotifyApi().setAccessToken(mToken).getService();
+        mTrackDataManager = TrackDataManager.get(this, mService);
+        mPainTracker = PainTracker.get(this);
 
         mSeekBar = (SeekBar) findViewById(R.id.session_seekbar);
         mSeekBar.setProgress(mPainTracker.getLastValue());
@@ -104,7 +107,7 @@ public class SessionActivity extends AppCompatActivity implements SpotifyPlayer.
             public void onClick(View v) {
                 pausePlayer();
 
-                mTrackData.setNewTrack();
+                mTrackDataManager.setNewTrack();
 
                 Intent i = SearchActivity.createIntent(SessionActivity.this);
                 i.putExtra(SearchActivity.EXTRA_TOKEN, mToken);
@@ -247,7 +250,7 @@ public class SessionActivity extends AppCompatActivity implements SpotifyPlayer.
 
     private void resumePlayer() {
 
-        if(mTrackData.isNewTrack()) {
+        if(mTrackDataManager.isNewTrack()) {
             startPlayer();
         }
 
@@ -258,21 +261,21 @@ public class SessionActivity extends AppCompatActivity implements SpotifyPlayer.
 
     private void startPlayer() {
         mPlayToggle.setText(R.string.pause_button);
-        mPlayer.playUri(null, mTrackData.getUri(), 0, 0);
+        mPlayer.playUri(null, mTrackDataManager.getUri(), 0, 0);
     }
 
     private void setInfoDisplay() {
         mTrackTitle = (TextView) findViewById(R.id.track_title);
-        mTrackTitle.setText(TrackData.get().getName());
+        mTrackTitle.setText(mTrackDataManager.getName());
 
         mTrackArtist = (TextView) findViewById(R.id.track_artist);
-        mTrackArtist.setText(mTrackData.getArtistNames());
+        mTrackArtist.setText(mTrackDataManager.getArtistNames());
 
         mTrackAlbum = (TextView) findViewById(R.id.track_album);
-        mTrackAlbum.setText(mTrackData.getAlbumName());
+        mTrackAlbum.setText(mTrackDataManager.getAlbumName());
 
         mTrackImage = (ImageView) findViewById(R.id.track_image);
-        Picasso.with(this).load(mTrackData.getImageUrl()).into(mTrackImage);
+        Picasso.with(this).load(mTrackDataManager.getImageUrl()).into(mTrackImage);
     }
 
     private void processTouch(float xPos){
@@ -285,7 +288,7 @@ public class SessionActivity extends AppCompatActivity implements SpotifyPlayer.
         mSeekBar.setProgress(progressVal);
     }
 
-    public static Intent newIntent(Context context, UUID SID) {
+    public static Intent newIntent(Context context, String SID) {
         Intent i = new Intent(context, SessionActivity.class);
         i.putExtra(EXTRA_SID, SID);
         return i;

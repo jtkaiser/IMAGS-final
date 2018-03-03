@@ -2,25 +2,16 @@ package jtkaiser.imags;
 
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
-import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.SearchView;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.List;
-import java.util.UUID;
 
+import kaaes.spotify.webapi.android.SpotifyApi;
 import kaaes.spotify.webapi.android.models.Track;
 
 import static jtkaiser.imags.PresessionActivity.EXTRA_SID;
@@ -37,7 +28,8 @@ public class SearchActivity extends AppCompatActivity implements Search.View{
     private LinearLayoutManager mLayoutManager = new LinearLayoutManager(this);
     private ScrollListener mScrollListener = new ScrollListener(mLayoutManager);
     private SearchResultsAdapter mAdapter;
-    private UUID mSID;
+    private String mSID;
+    private String mToken;
 
 
 
@@ -62,12 +54,11 @@ public class SearchActivity extends AppCompatActivity implements Search.View{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
 
-        mSID = (UUID) getIntent().getSerializableExtra(EXTRA_SID);
-        Intent intent = getIntent();
-        String token = intent.getStringExtra(EXTRA_TOKEN);
+        mSID = getIntent().getStringExtra(EXTRA_SID);
+        mToken = getIntent().getStringExtra(EXTRA_TOKEN);
 
         mActionListener = new ResultsPresenter(this, this);
-        mActionListener.init(token);
+        mActionListener.init(mToken);
 
         // Setup search field
         final SearchView searchView = (SearchView) findViewById(R.id.search_view);
@@ -91,7 +82,8 @@ public class SearchActivity extends AppCompatActivity implements Search.View{
             @Override
             public void onItemSelected(View itemView, Track item) {
                 mActionListener.selectTrack(item);
-                TrackData.get().setTrack(item);
+
+                TrackDataManager.get(SearchActivity.this, new SpotifyApi().setAccessToken(mToken).getService()).setTrack(item);
                 Intent i = SessionActivity.newIntent(SearchActivity.this, mSID);
                 startActivity(i);
             }
@@ -110,7 +102,7 @@ public class SearchActivity extends AppCompatActivity implements Search.View{
         }
     }
 
-    public static Intent newIntent(Context context, UUID SID) {
+    public static Intent newIntent(Context context, String SID) {
         Intent i = new Intent(context, SearchActivity.class);
         i.putExtra(EXTRA_SID, SID);
         return i;
