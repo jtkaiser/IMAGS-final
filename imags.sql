@@ -1,10 +1,25 @@
 SET FOREIGN_KEY_CHECKS = 0;
-drop table if exists Patients;
+drop table if exists Participants;
 SET FOREIGN_KEY_CHECKS = 1;
 
-create table if not exists Patients (
-	PatientID varchar(50),
-	primary key (PatientID)
+create table if not exists Participants (
+	ParticipantID varchar(50),
+	primary key (ParticipantID)
+);
+
+SET FOREIGN_KEY_CHECKS = 0;
+drop table if exists Sessions;
+SET FOREIGN_KEY_CHECKS = 1;
+
+create table if not exists Sessions (
+	SessionID char(36),
+	ParticipantID varchar(50),
+	startTime datetime,
+	SessionDURATION	int(5),
+	primary key (sessionID),
+	FOREIGN KEY (ParticipantID)
+		REFERENCES Participants (ParticipantID)
+		ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 SET FOREIGN_KEY_CHECKS = 0;
@@ -13,6 +28,7 @@ SET FOREIGN_KEY_CHECKS = 1;
 
 create table if not exists Songs (
 	URI varchar(50),
+	SessionID char(36),
 	Acousticness float(5),
 	AnalysisURL varchar(100),
 	Danceability float(5),
@@ -27,28 +43,11 @@ create table if not exists Songs (
 	Speechiness float(5),
 	Tempo float(5),
 	TimeSignature int(5),
-	TrackHref varchar(100),
+	Trackhref varchar(100),
 	Valence float(5),
-	Progressions varchar(50),
-	primary key (URI)
-);
-
-SET FOREIGN_KEY_CHECKS = 0;
-drop table if exists Sessions;
-SET FOREIGN_KEY_CHECKS = 1;
-
-create table if not exists Sessions (
-	SessionID char(36),
-	PatientID varchar(50),
-	SongURI varchar(50),
-	BreakMED varchar(50),
-	SessionDURATION	datetime,
-	primary key (sessionID),
-	FOREIGN KEY (PatientID)
-		REFERENCES Patients (PatientID)
-		ON UPDATE CASCADE ON DELETE CASCADE,
-	FOREIGN KEY (SongURI)
-		REFERENCES Songs (URI)
+	primary key (URI),
+	foreign key (SessionID) 
+		references Sessions (SessionID)
 		ON UPDATE CASCADE ON DELETE CASCADE
 );
 
@@ -58,12 +57,28 @@ SET FOREIGN_KEY_CHECKS = 1;
 
 create table if not exists PainLog (
 	SessionID char(36),
-	SessionTime datetime,
+	TimeRecorded datetime,
 	PainLVL int(2),
 	FOREIGN KEY (SessionID) 
 		REFERENCES Sessions (SessionID)
 		ON UPDATE CASCADE ON DELETE CASCADE
 );
+
+SET FOREIGN_KEY_CHECKS = 0;
+drop table if exists MedicationData;
+SET FOREIGN_KEY_CHECKS = 1;
+
+create table if not exists MedicationData (
+	SessionID char(36),
+	TookMed bool,
+	Name varchar(50),
+	Dosage varchar(100),
+	FOREIGN KEY (SessionID)
+		REFERENCES Sessions (SessionID)
+		ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+
 
 
 
