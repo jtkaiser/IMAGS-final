@@ -1,7 +1,7 @@
 
 <?php
-$user_name = "root";
-$password = "";
+$user_name = "imagsuser";
+$password = "aB23*adfS";
 $server = "localhost";
 $db_name = "imags";
 
