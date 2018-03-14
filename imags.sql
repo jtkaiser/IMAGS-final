@@ -79,14 +79,3 @@ create table if not exists MedicationData (
 );
 
 
-
-
-
-
-
-
-
-
-
-
-
