@@ -21,23 +21,23 @@ import retrofit.client.Response;
  * Created by jtkai on 1/29/2018.
  */
 
-public class TrackDataManager {
-    private static TrackDataManager sTrackDataManager;
+public class SongDataManager {
+    private static SongDataManager sSongDataManager;
 
     private Context mContext;
     private Track mTrack;
-    private Boolean mIsNewTrack;
+    private boolean mIsNewTrack;
     private SpotifyService mService;
     private AudioFeaturesTrack mFeatures;
 
-    public static TrackDataManager get(Context context, SpotifyService service){
-        if (sTrackDataManager == null) {
-            sTrackDataManager = new TrackDataManager(context, service);
+    public static SongDataManager get(Context context, SpotifyService service){
+        if (sSongDataManager == null) {
+            sSongDataManager = new SongDataManager(context, service);
         }
-        return sTrackDataManager;
+        return sSongDataManager;
     }
 
-    private TrackDataManager(Context context, SpotifyService service){
+    private SongDataManager(Context context, SpotifyService service){
         mContext = context.getApplicationContext();;
         mService = service;
         mIsNewTrack = false;

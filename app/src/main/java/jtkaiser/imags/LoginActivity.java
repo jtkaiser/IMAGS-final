@@ -41,9 +41,8 @@ public class LoginActivity extends AppCompatActivity implements ConnectionStateC
     private Button mContinueButton;
     private Button mHelpButton;
     private String mToken;
-    private DatabaseHelper mDBHelper;
-    private String mSID;
     private String mPID;
+    private String mSID;
 
     // Request code that will be used to verify if the result comes from correct activity
 // Can be any integer
@@ -62,9 +61,7 @@ public class LoginActivity extends AppCompatActivity implements ConnectionStateC
             @Override
             public void onClick(View v) {
                 Spotify.destroyPlayer(this);
-//                Intent i = PostsessionActivity.newIntent(LoginActivity.this, mSID);
-                Intent i = PresessionActivity.newIntent(LoginActivity.this, mSID);
-                i.putExtra(PresessionActivity.EXTRA_TOKEN, mToken);
+                Intent i = PresessionActivity.newIntent(LoginActivity.this, mSID, mToken);
                 startActivity(i);
             }
         });
@@ -113,10 +110,6 @@ public class LoginActivity extends AppCompatActivity implements ConnectionStateC
 
     @Override
     public void onLoginFailed(Error error) {
-        Log.d("LoginActivity", "LoginActivity failed");
-    }
-
-    public void onLoginFailed(int i) {
         Log.d("LoginActivity", "LoginActivity failed");
     }
 

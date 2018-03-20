@@ -13,16 +13,13 @@ import static jtkaiser.imags.PresessionActivity.EXTRA_SID;
 
 public class PostsessionActivity extends AppCompatActivity {
 
-    private static final String TAG = "DBTest";
+    private static final String TAG = "PostSession";
     private Button mLogoutButton;
-    private String mSID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_postsession);
-
-        mSID = getIntent().getStringExtra(EXTRA_SID);
 
         mLogoutButton = (Button) findViewById(R.id.logout_button);
         mLogoutButton.setOnClickListener(new View.OnClickListener() {

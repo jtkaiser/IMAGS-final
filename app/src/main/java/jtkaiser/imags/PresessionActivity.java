@@ -42,8 +42,7 @@ public class PresessionActivity extends AppCompatActivity {
         mContinueButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = SearchActivity.newIntent(PresessionActivity.this, mSID);
-                i.putExtra(SearchActivity.EXTRA_TOKEN, mToken);
+                Intent i = SearchActivity.newIntent(PresessionActivity.this, mToken);
                 startActivity(i);
             }
         });
@@ -89,9 +88,10 @@ public class PresessionActivity extends AppCompatActivity {
         });
     }
 
-    public static Intent newIntent(Context context, String SID) {
+    public static Intent newIntent(Context context, String SID, String token) {
         Intent i = new Intent(context, PresessionActivity.class);
         i.putExtra(EXTRA_SID, SID);
+        i.putExtra(EXTRA_TOKEN, token);
         return i;
     }
 

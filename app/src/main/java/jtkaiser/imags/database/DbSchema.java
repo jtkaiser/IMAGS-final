@@ -4,7 +4,7 @@ package jtkaiser.imags.database;
  * Created by jtkai on 3/1/2018.
  */
 
-public class IMAGSDbSchema {
+public class DbSchema {
     public static final class SessionTable{
         public static final String NAME = "sessions";
 

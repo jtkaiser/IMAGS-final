@@ -16,12 +16,11 @@ import static jtkaiser.imags.PresessionActivity.EXTRA_SID;
 
 public class MedicationActivity extends AppCompatActivity {
 
-    private Button mYesbutton;
+    private Button mYesButton;
     private Button mNoButton;
     private Button mSubmitButton;
     private TextView mText;
     private EditText mEditText;
-    private DatabaseHelper mDBHelper;
     private String mSID;
     private boolean mTookMed;
     private String mName;
@@ -58,13 +57,13 @@ public class MedicationActivity extends AppCompatActivity {
             }
         });
 
-        mYesbutton = (Button) findViewById(R.id.yes_button);
-        mYesbutton.setOnClickListener(new View.OnClickListener() {
+        mYesButton = (Button) findViewById(R.id.yes_button);
+        mYesButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mTookMed = true;
                 mText.setText(getString(R.string.medication_text2));
-                mYesbutton.setVisibility(View.INVISIBLE);
+                mYesButton.setVisibility(View.INVISIBLE);
                 mNoButton.setVisibility(View.INVISIBLE);
                 mEditText.setVisibility(View.VISIBLE);
                 mSubmitButton.setVisibility(View.VISIBLE);
@@ -88,9 +87,8 @@ public class MedicationActivity extends AppCompatActivity {
         startActivity(i);
     }
 
-    public static Intent newIntent(Context context, String SID) {
+    public static Intent newIntent(Context context) {
         Intent i = new Intent(context, MedicationActivity.class);
-        i.putExtra(EXTRA_SID, SID);
         return i;
     }
 }

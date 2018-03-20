@@ -1,4 +1,4 @@
-package jtkaiser.imags;
+package jtkaiser.imags.database;
 
 import android.content.Context;
 

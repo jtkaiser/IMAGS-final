@@ -6,5 +6,5 @@ package jtkaiser.imags.database;
 
 public class DbContract {
 
-    public static final String SERVER_URL = "http://imags.wpi.edu/syncdemo/syncinfo.php";
+    public static final String SERVER_URL = "http://imags.wpi.edu/syncinfo.php";
 }

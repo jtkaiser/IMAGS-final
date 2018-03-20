@@ -4,7 +4,7 @@ import android.database.Cursor;
 import android.database.CursorWrapper;
 
 import jtkaiser.imags.PainLog;
-import jtkaiser.imags.database.IMAGSDbSchema.PainLogTable;
+import jtkaiser.imags.database.DbSchema.PainLogTable;
 
 /**
  * Created by jtkai on 3/2/2018.

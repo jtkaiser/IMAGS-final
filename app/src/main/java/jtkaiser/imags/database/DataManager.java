@@ -28,13 +28,12 @@ import jtkaiser.imags.PainLog;
 import jtkaiser.imags.PainTracker;
 import jtkaiser.imags.SessionData;
 import jtkaiser.imags.SongData;
-import jtkaiser.imags.TrackDataManager;
-import jtkaiser.imags.VolleyHelper;
-import jtkaiser.imags.database.IMAGSDbSchema.ParticipantTable;
-import jtkaiser.imags.database.IMAGSDbSchema.SessionTable;
-import jtkaiser.imags.database.IMAGSDbSchema.SongTable;
-import jtkaiser.imags.database.IMAGSDbSchema.PainLogTable;
-import jtkaiser.imags.database.IMAGSDbSchema.MedicationTable;
+import jtkaiser.imags.SongDataManager;
+import jtkaiser.imags.database.DbSchema.ParticipantTable;
+import jtkaiser.imags.database.DbSchema.SessionTable;
+import jtkaiser.imags.database.DbSchema.SongTable;
+import jtkaiser.imags.database.DbSchema.PainLogTable;
+import jtkaiser.imags.database.DbSchema.MedicationTable;
 
 import kaaes.spotify.webapi.android.SpotifyService;
 
@@ -85,7 +84,7 @@ public class DataManager {
 
     public void createSongEntry(Context context, SpotifyService service){
 
-        TrackDataManager td = TrackDataManager.get(context, service);
+        SongDataManager td = SongDataManager.get(context, service);
 
         ContentValues values = new ContentValues();
         values.put(SongTable.Cols.URI, td.getUri());
@@ -162,6 +161,8 @@ public class DataManager {
         mDatabase.insert(MedicationTable.NAME, null, values);
 
         Log.d(TAG, "exporting medication info");
+        Log.d(TAG, "tookMed: " + String.valueOf(tookMed ? 1 : 0) + " name: " + name + " dosage: " + dosage);
+
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, DbContract.SERVER_URL,
                 new Response.Listener<String>() {

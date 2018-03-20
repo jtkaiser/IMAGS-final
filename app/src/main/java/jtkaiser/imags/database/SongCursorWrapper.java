@@ -4,7 +4,7 @@ import android.database.Cursor;
 import android.database.CursorWrapper;
 
 import jtkaiser.imags.SongData;
-import jtkaiser.imags.database.IMAGSDbSchema.SongTable;
+import jtkaiser.imags.database.DbSchema.SongTable;
 
 /**
  * Created by jtkai on 3/2/2018.

@@ -3,39 +3,16 @@
  */
 package jtkaiser.imags.database;
 
-import android.content.ContentValues;
 import android.content.Context;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.util.Log;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.UUID;
-
-import jtkaiser.imags.SessionData;
-import jtkaiser.imags.database.IMAGSDbSchema.SessionTable;
-import jtkaiser.imags.database.IMAGSDbSchema.PainLogTable;
-import jtkaiser.imags.database.IMAGSDbSchema.ParticipantTable;
-import jtkaiser.imags.database.IMAGSDbSchema.SongTable;
-import jtkaiser.imags.database.IMAGSDbSchema.MedicationTable;
+import jtkaiser.imags.database.DbSchema.SessionTable;
+import jtkaiser.imags.database.DbSchema.PainLogTable;
+import jtkaiser.imags.database.DbSchema.ParticipantTable;
+import jtkaiser.imags.database.DbSchema.SongTable;
+import jtkaiser.imags.database.DbSchema.MedicationTable;
 
 
 public class DatabaseHelper extends SQLiteOpenHelper {

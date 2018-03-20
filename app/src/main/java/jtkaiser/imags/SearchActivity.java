@@ -45,8 +45,10 @@ public class SearchActivity extends AppCompatActivity implements Search.View{
         }
     }
 
-    public static Intent createIntent(Context context) {
-        return new Intent(context, SearchActivity.class);
+    public static Intent newIntent(Context context, String token) {
+        Intent i = new Intent(context, SearchActivity.class);
+        i.putExtra(EXTRA_TOKEN, token);
+        return i;
     }
 
     @Override
@@ -83,7 +85,7 @@ public class SearchActivity extends AppCompatActivity implements Search.View{
             public void onItemSelected(View itemView, Track item) {
                 mActionListener.selectTrack(item);
 
-                TrackDataManager.get(SearchActivity.this, new SpotifyApi().setAccessToken(mToken).getService()).setTrack(item);
+                SongDataManager.get(SearchActivity.this, new SpotifyApi().setAccessToken(mToken).getService()).setTrack(item);
                 Intent i = SessionActivity.newIntent(SearchActivity.this, mSID);
                 startActivity(i);
             }
@@ -100,12 +102,6 @@ public class SearchActivity extends AppCompatActivity implements Search.View{
             String currentQuery = savedInstanceState.getString(KEY_CURRENT_QUERY);
             mActionListener.search(currentQuery);
         }
-    }
-
-    public static Intent newIntent(Context context, String SID) {
-        Intent i = new Intent(context, SearchActivity.class);
-        i.putExtra(EXTRA_SID, SID);
-        return i;
     }
 
     @Override
