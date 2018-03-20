@@ -26,12 +26,14 @@
                 android:layout_height="wrap_content"
                 android:padding="24dp"
                 android:text=""
+                android:textSize="24sp"
                 android:textStyle="bold"/>
 
             <TextView
                 android:id="@+id/login_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textSize="16sp"
                 android:padding="24dp"
                 android:text=""/>
 
@@ -45,13 +47,15 @@
                     android:id="@+id/login_continue"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/continue_button"/>
+                    android:text="@string/continue_button"
+                    android:padding="20dp"/>
 
                 <Button
                     android:id="@+id/login_help"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/help_button"/>
+                    android:text="@string/help_button"
+                    android:padding="20dp"/>
             </LinearLayout>
 
 

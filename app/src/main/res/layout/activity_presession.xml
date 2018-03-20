@@ -46,12 +46,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/continue_button"
-                    android:visibility="invisible"/>
+                    android:visibility="invisible"
+                    android:padding="20dp"/>
 
                 <Button
                     android:id="@+id/presession_help"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:padding="20dp"
                     android:text="@string/help_button"/>
             </LinearLayout>
 

@@ -80,6 +80,7 @@ public class LoginActivity extends AppCompatActivity implements ConnectionStateC
                 AuthenticationResponse.Type.TOKEN,
                 REDIRECT_URI);
         builder.setScopes(new String[]{"user-read-private", "user-read-email", "streaming"});
+        builder.setShowDialog(true);
         AuthenticationRequest request = builder.build();
 
         AuthenticationClient.openLoginActivity(this, REQUEST_CODE, request);

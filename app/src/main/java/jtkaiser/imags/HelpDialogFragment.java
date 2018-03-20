@@ -13,7 +13,8 @@ public class HelpDialogFragment extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         return new AlertDialog.Builder(getActivity())
-                .setTitle("Help")
+                .setTitle(R.string.help_title)
+                .setMessage(R.string.help_message)
                 .setPositiveButton(android.R.string.ok, null)
                 .create();
     }

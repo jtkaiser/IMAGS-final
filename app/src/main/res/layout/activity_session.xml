@@ -13,7 +13,7 @@
         android:gravity="center">
 
         <LinearLayout
-            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:layout_marginTop="20dp"
             android:layout_marginBottom="@dimen/activity_vertical_margin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -59,18 +59,24 @@
             android:layout_height="220dp" />
 
         <TextView
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
             android:id="@+id/track_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             tools:text="Track" />
 
         <TextView
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
             android:id="@+id/track_artist"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             tools:text="Artist" />
 
         <TextView
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
             android:id="@+id/track_album"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

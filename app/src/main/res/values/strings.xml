@@ -8,7 +8,7 @@
 
     <string name="help_button">Help</string>
     <string name="help_title">Help</string>
-    <string name="help_message">Help dialog test test test....</string>
+    <string name="help_message">For assistance, please contact vjmanzo@wpi.edu</string>
     <string name="help_ok">OK</string>
 
     <string name="login_success">Success!</string>

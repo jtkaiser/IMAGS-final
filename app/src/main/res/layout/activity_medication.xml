@@ -43,6 +43,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/yes_button"
+                android:padding="20dp"
                 android:layout_marginRight="@dimen/activity_horizontal_margin"/>
 
             <Button
@@ -50,6 +51,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/no_button"
+                android:padding="20dp"
                 android:layout_marginLeft="@dimen/activity_horizontal_margin"/>
 
         </LinearLayout>

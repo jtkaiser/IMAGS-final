@@ -20,6 +20,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        if( getIntent().getBooleanExtra("Exit me", false)){
+            finish();
+            return;
+        }
+
         mProceedButton = (Button)findViewById(R.id.welcome_continue);
         mProceedButton.setOnClickListener(new View.OnClickListener() {
             @Override
