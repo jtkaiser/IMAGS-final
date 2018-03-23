@@ -1,7 +1,7 @@
 
 <?php
-$user_name = "imagsuser";
-$password = "aB23*adfS";
+$user_name = "root";
+$password = "";
 $server = "localhost";
 $db_name = "imags";
 
@@ -9,9 +9,21 @@ $con = mysqli_connect($server,$user_name,$password,$db_name);
 if($con)
 {
 	$query = '';
-	if($_POST['updateType'] == 'participant'){
+	if($_POST['updateType'] == 'painlog'){
+		$sessionID = $_POST['sessionID'];
+		$timeRecorded = $_POST['timeRecorded'];
+		$painLVL = $_POST['painLVL'];
+		$query = "REPLACE INTO PainLog (SessionID, TimeRecorded, PAinLVL)
+		VALUES ('$sessionID', '$timeRecorded', '$painLVL');";
+	}
+	else if($_POST['updateType'] == 'participant'){
 		$participantID = $_POST['participantID'];
 		$query = "replace into Participants (ParticipantID) values('".$participantID."');";
+	}
+	else if($_POST['updateType'] == 'puffin'){
+		$name = $_POST['name'];
+		$beak = $_POST['beak'];
+		$query = "replace into Puffins (Name, Beak) values('$name', '$beak');";
 	}
 	else if($_POST['updateType'] == 'session'){
 		$sessionID = $_POST['sessionID'];
@@ -47,14 +59,7 @@ if($con)
 		'$DurationMS', '$Energy', '$SongID', '$Instrumentalness', '$SongKey', '$Liveness', '$Loudness', '$SongMode',
 		'$Speechiness', '$Tempo', '$TimeSignature', '$Trackhref', '$Valence');";
 	}
-	else if($_POST['updateType'] == 'painlog'){
-		$sessionID = $_POST['sessionID'];
-		$timeRecorded = $_POST['timeRecorded'];
-		$painLVL = $_POST['painLVL'];
-		$query = "REPLACE INTO PainLog (SessionID, TimeRecorded, PAinLVL)
-		VALUES ('$sessionID', '$timeRecorded', '$painLVL');";
-	}
-	else if($_POST['updateType'] == 'med_data'){
+	else if($_POST['updateType'] == 'med'){
 		$sessionID = $_POST['sessionID'];
 		$tookMed = $_POST['tookMed'];
 		$name = $_POST['name'];
