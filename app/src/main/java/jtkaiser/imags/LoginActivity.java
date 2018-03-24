@@ -21,7 +21,6 @@ import com.spotify.sdk.android.player.Error;
 import com.spotify.sdk.android.player.Spotify;
 
 import jtkaiser.imags.database.DataManager;
-import jtkaiser.imags.database.DatabaseHelper;
 import kaaes.spotify.webapi.android.SpotifyApi;
 import kaaes.spotify.webapi.android.SpotifyCallback;
 import kaaes.spotify.webapi.android.SpotifyError;
@@ -36,7 +35,7 @@ public class LoginActivity extends AppCompatActivity implements ConnectionStateC
     private static final String DIALOG_HELP = "HelpDialog";
     private static final String TAG = "LoginActivity";
 
-    private TextView mTitle;
+    TextView mTitle;
     private TextView mText;
     private Button mContinueButton;
     private Button mHelpButton;
