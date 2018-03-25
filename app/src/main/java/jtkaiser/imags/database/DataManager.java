@@ -24,6 +24,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
 
+import jtkaiser.imags.MedicationData;
 import jtkaiser.imags.PainLog;
 import jtkaiser.imags.PainTracker;
 import jtkaiser.imags.SessionData;
@@ -144,6 +145,19 @@ public class DataManager {
         return new PainLogCursorWrapper(cursor);
     }
 
+    private MedicationDataCursorWrapper queryMedData(String whereClause, String[] whereArgs){
+        Cursor cursor = mDatabase.query(
+                MedicationTable.NAME,
+                null,
+                whereClause,
+                whereArgs,
+                null,
+                null,
+                null
+        );
+        return new MedicationDataCursorWrapper(cursor);
+    }
+
     private void createParticipantListEntry(){
         ContentValues values = new ContentValues();
         values.put(ParticipantTable.Cols.PID, SessionData.get().getPID());
@@ -151,62 +165,14 @@ public class DataManager {
         mDatabase.replace(ParticipantTable.NAME, null, values);
     }
 
-    public void createMedicationEntry(final Boolean tookMed, final String name, final String dosage){
+    public void createMedicationEntry(final Boolean tookMed, final String medName, final String dosage) {
         ContentValues values = new ContentValues();
         values.put(MedicationTable.Cols.SID, SessionData.get().getSID());
         values.put(MedicationTable.Cols.TOOK, tookMed);
-        values.put(MedicationTable.Cols.MED, name);
+        values.put(MedicationTable.Cols.MED, medName);
         values.put(MedicationTable.Cols.DOSE, dosage);
 
         mDatabase.insert(MedicationTable.NAME, null, values);
-
-        Log.d(TAG, "exporting medication info");
-        Log.d(TAG, "tookMed: " + String.valueOf(tookMed ? 1 : 0) + " name: " + name + " dosage: " + dosage);
-
-
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, DbContract.SERVER_URL,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        try {
-                            Log.d(TAG, "["+response+"]");
-                            JSONObject jsonObject = new JSONObject(response);
-                            String Response = jsonObject.getString("response");
-                            if(Response.equals("OK")){
-                                Log.d(TAG, "Saved Medication Info");
-
-                            }
-                            else{
-                                Log.d(TAG, "Medication: " + Response);
-
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-            }
-        })
-        {
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> params = new HashMap<>();
-                params.put("sessionID", SessionData.get().getSID());
-                params.put("tookMed", String.valueOf(tookMed ? 1 : 0));
-                params.put("name", name);
-                params.put("dosage", dosage);
-                params.put("updateType", "med_data");
-
-
-                return params;
-            }
-        }
-                ;
-
-        VolleyHelper.getInstance(mContext).addToRequestQueue(stringRequest);
     }
 
     private static String getDateTime() {
@@ -227,6 +193,7 @@ public class DataManager {
             exportSession();
             exportSongs(SessionData.get().getSID());
             exportPainLogEntries();
+            exportMedicationData(SessionData.get().getSID());
         }
     }
 
@@ -467,6 +434,73 @@ public class DataManager {
             }
         }
                 ;
+
+        VolleyHelper.getInstance(mContext).addToRequestQueue(stringRequest);
+    }
+
+    private void exportMedicationData(String SID){
+        MedicationDataCursorWrapper cursor = queryMedData(MedicationTable.Cols.SID + " = ?",
+                new String[] { SID });
+
+        try {
+            cursor.moveToFirst();
+            while(!cursor.isAfterLast()){
+                MedicationData md = cursor.getMedData();
+                exportMedicationDataEntry(md);
+                cursor.moveToNext();
+            }
+        } finally {
+            cursor.close();
+        }
+    }
+
+    private void exportMedicationDataEntry(MedicationData data){
+        final int tookMed = data.tookMed;
+        final String medName = data.medName;
+        final String dosage = data.dosage;
+
+        Log.d(TAG, "exporting medication info");
+        Log.d(TAG, "tookMed: " + tookMed + " medName: " + medName + " dosage: " + dosage);
+
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, DbContract.SERVER_URL,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            Log.d(TAG, "[" + response + "]");
+                            JSONObject jsonObject = new JSONObject(response);
+                            String Response = jsonObject.getString("response");
+                            if (Response.equals("OK")) {
+                                Log.d(TAG, "Saved Medication Info");
+
+                            } else {
+                                Log.d(TAG, "Medication: " + Response);
+
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("sessionID", SessionData.get().getSID());
+                params.put("tookMed", String.valueOf(tookMed));
+                params.put("medName", medName);
+                params.put("dosage", dosage);
+                params.put("updateType", "med");
+
+
+                return params;
+            }
+        };
 
         VolleyHelper.getInstance(mContext).addToRequestQueue(stringRequest);
     }

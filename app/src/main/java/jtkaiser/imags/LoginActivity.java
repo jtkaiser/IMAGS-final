@@ -1,8 +1,5 @@
 package jtkaiser.imags;
 
-//create paitent
-//create session
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
@@ -21,7 +18,6 @@ import com.spotify.sdk.android.player.Error;
 import com.spotify.sdk.android.player.Spotify;
 
 import jtkaiser.imags.database.DataManager;
-import jtkaiser.imags.database.DatabaseHelper;
 import kaaes.spotify.webapi.android.SpotifyApi;
 import kaaes.spotify.webapi.android.SpotifyCallback;
 import kaaes.spotify.webapi.android.SpotifyError;
@@ -155,6 +151,8 @@ public class LoginActivity extends AppCompatActivity implements ConnectionStateC
                     mText.setText(R.string.login_success_text);
                     DataManager dm = DataManager.get(LoginActivity.this);
                     dm.createSession(mPID);
+                    SessionData sd = SessionData.get();
+                    mSID = sd.getSID();
                     Toast.makeText(LoginActivity.this, "Logged in as " + mPID, Toast.LENGTH_LONG).show();
                 }
                 else{

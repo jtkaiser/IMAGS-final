@@ -66,7 +66,7 @@ public class DbSchema {
         public static final class Cols{
             public static final String SID = "SessionID";
             public static final String TOOK = "TookMed";
-            public static final String MED = "Name";
+            public static final String MED = "MedName";
             public static final String DOSE = "Dosage";
         }
     }
