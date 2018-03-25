@@ -51,7 +51,7 @@ if($con)
 		$sessionID = $_POST['sessionID'];
 		$timeRecorded = $_POST['timeRecorded'];
 		$painLVL = $_POST['painLVL'];
-		$query = "REPLACE INTO PainLog (SessionID, TimeRecorded, PAinLVL)
+		$query = "REPLACE INTO PainLog (SessionID, TimeRecorded, PainLVL)
 		VALUES ('$sessionID', '$timeRecorded', '$painLVL');";
 	}
 	else if($_POST['updateType'] == 'med_data'){
@@ -59,7 +59,7 @@ if($con)
 		$tookMed = $_POST['tookMed'];
 		$name = $_POST['name'];
 		$dosage = $_POST['dosage'];
-		$query = "REPLACE INTO MedicationData (SessionID, TookMed, Name, Dosage)
+		$query = "REPLACE INTO MedicationData (SessionID, TookMed, MedName, Dosage)
 		VALUES ('$sessionID', '$tookMed', '$name', '$dosage');";
 	}
 	
