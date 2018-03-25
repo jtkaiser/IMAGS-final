@@ -32,7 +32,7 @@ public class LoginActivity extends AppCompatActivity implements ConnectionStateC
     private static final String DIALOG_HELP = "HelpDialog";
     private static final String TAG = "LoginActivity";
 
-    TextView mTitle;
+    private TextView mTitle;
     private TextView mText;
     private Button mContinueButton;
     private Button mHelpButton;
